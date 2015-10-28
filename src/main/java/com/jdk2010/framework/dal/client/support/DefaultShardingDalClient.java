@@ -308,7 +308,7 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("初始化datasource...");
+        logger.info("初始化datasource...");
         for (String key : dataSources.keySet()) {
             shards.put(key, new NamedParameterJdbcTemplate(dataSources.get(key)));
         }

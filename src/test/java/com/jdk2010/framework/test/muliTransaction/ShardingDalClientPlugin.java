@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.jdk2010.framework.dal.client.support.DefaultShardingDalClient;
 
-public class MyShardingDalClient extends DefaultShardingDalClient {
+public class ShardingDalClientPlugin extends DefaultShardingDalClient {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public String shardingRule(Object parameterObject) {
