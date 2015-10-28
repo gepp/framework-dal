@@ -1,4 +1,4 @@
-package com.jdk2010.framework.test;
+package com.jdk2010.framework.test.muliTransaction;
 
 import java.util.UUID;
 
@@ -82,7 +82,7 @@ public class TestTransactionManager {
      */
     public static void test4(){
         BeanFactory factory = new ClassPathXmlApplicationContext("applicationContext_shard.xml");
-        DalClient client = (DefaultShardingDalClient) factory.getBean("myShardSqlDal");
+        DalClient client = (DefaultShardingDalClient) factory.getBean("MyShardingDalClient");
         String sql="insert into t_user(id,name) values ('" + UUID.randomUUID().toString() + "','3')";
         DbKit dbKit=new DbKit(sql);
         dbKit.put("id","1");

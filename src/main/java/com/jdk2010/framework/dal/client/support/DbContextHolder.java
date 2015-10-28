@@ -22,7 +22,7 @@ public class DbContextHolder {
 	}
 
 	public static void clearDataSource() {
-		logger.info("当前数据源切换为默认数据源...");
+        logger.info("当前数据源切换为默认数据源...");
 		contextHolder.remove();
 	}
 

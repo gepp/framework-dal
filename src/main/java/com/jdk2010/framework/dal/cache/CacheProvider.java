@@ -2,14 +2,22 @@ package com.jdk2010.framework.dal.cache;
 
 public interface CacheProvider {
 
-	int getSize(String cacheName);
+    int getSize(String cacheName);
 
-	void put(String cacheName,Object key, Object value,int timeout);
+    void put(String cacheName, Object key, Object value, int timeout);
 
-	Object get(String cacheName,Object key);
+    void put(Object key, Object value);
+    
+    void put(Object key, Object value,int timeout);
 
-	void remove(String cacheName,Object key);
+    Object get(String cacheName, Object key);
 
-	void clear(String cacheName);
+    Object get(Object value);
+
+    void remove(String cacheName, Object key);
+
+    void remove(Object key);
+
+    void clear(String cacheName);
 
 }

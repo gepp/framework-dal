@@ -99,7 +99,7 @@
   
 	
 	
-	<bean id="myShardSqlDal" class="com.jdk2010.framework.test.MyDalClient">
+	<bean id="myShardingDalClient" class="com.jdk2010.framework.test.MyShardingDalClient">
 		<property name="dataSources">
 			<map key-type="java.lang.String">
 				<entry key="dataSourceMysql1" value-ref="dataSourceMysql1"></entry>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false">
+	<diskStore path="f:/cache" />
+	<!-- 默认缓存 -->
+	<defaultCache maxElementsInMemory="10000" eternal="false"
+		timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true"
+		diskSpoolBufferSizeMB="30" maxElementsOnDisk="10000000"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU">
+	</defaultCache>
+
+	<!-- 缓存 -->
+	<cache name="metaCache" maxElementsInMemory="1000" eternal="false"
+		timeToIdleSeconds="2000" timeToLiveSeconds="1000" overflowToDisk="false">
+	</cache>
+	<!-- 缓存 -->
+	<cache name="defaultMetaCache" maxElementsInMemory="1000" eternal="false"
+		timeToIdleSeconds="2000" timeToLiveSeconds="1000" overflowToDisk="false">
+	</cache>
+</ehcache> 
