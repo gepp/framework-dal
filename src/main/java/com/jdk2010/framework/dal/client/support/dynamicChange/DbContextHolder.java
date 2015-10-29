@@ -1,4 +1,4 @@
-package com.jdk2010.framework.dal.client.support;
+package com.jdk2010.framework.dal.client.support.dynamicChange;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -17,6 +17,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.jdk2010.framework.dal.client.DalClient;
+import com.jdk2010.framework.dal.client.support.router.BaseRouterStrategy;
+import com.jdk2010.framework.dal.client.support.router.RouterManager;
+import com.jdk2010.framework.dal.client.support.router.method.DalHash;
+import com.jdk2010.framework.dal.client.support.router.method.DalMod;
 import com.jdk2010.framework.dal.dialect.IDialect;
 import com.jdk2010.framework.dal.dialect.MssqlDialect;
 import com.jdk2010.framework.dal.dialect.MysqlDialect;
@@ -149,12 +153,14 @@ public class DefaultDalClient implements DalClient, InitializingBean {
     public Integer save(Model model) {
         Map paramMap = new HashMap();
         String sql = DbKit.warpsavesql(model, paramMap);
+        logger.info(sql);
         return jdbcTemplate.update(sql, paramMap);
     }
 
     public Integer deleteByID(Object id, Class clazz) {
-        String tableName = DbKit.getTableNameByClass(clazz);
+        String tableName = DbKit.getTableName(clazz);
         String sql = "delete from " + tableName + " where id='" + id + "'";
+        logger.info(sql);
         return update(new DbKit(sql));
     }
 
@@ -169,7 +175,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         }
 
         String[] idStrs = ids.toString().split(",");
-        String tableName = DbKit.getTableNameByClass(clazz);
+        String tableName = DbKit.getTableName(clazz);
 
         for (String id : idStrs) {
             String sql = "delete from " + tableName + " where id='" + id + "'";
@@ -180,7 +186,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
     }
 
     public <T> T findById(Object id, Class clazz) {
-        String tableName = DbKit.getTableNameByClass(clazz);
+        String tableName = DbKit.getTableName(clazz);
         String sql = "select * from " + tableName + " where id='" + id + "'";
         return (T) queryForObject(new DbKit(sql), clazz);
     }
@@ -287,6 +293,8 @@ public class DefaultDalClient implements DalClient, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         this.dataSource = dataSource;
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        RouterManager.getRouters().put("hash", new DalHash());
+        RouterManager.getRouters().put("mod", new DalMod());
         Connection connection = null;
         try {
             connection = dataSource.getConnection();

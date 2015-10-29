@@ -11,8 +11,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.jdk2010.framework.dal.client.support.router.BaseRouterStrategy;
+import com.jdk2010.framework.dal.client.support.router.RouterManager;
 import com.jdk2010.framework.dal.exception.ExceptionUtil;
+import com.jdk2010.framework.dal.model.Model;
 import com.jdk2010.framework.dal.parse.annotation.TableField;
+import com.jdk2010.framework.dal.parse.annotation.TableRouterRule;
+import com.jdk2010.framework.test.router.Student;
 
 public class DbKit {
 
@@ -153,7 +158,7 @@ public class DbKit {
 
     }
 
-    public static String getTableNameByClass(Class clazz) {
+    public static String getBaseTableNameByClass(Class clazz) {
         if (clazz == null)
             return null;
         String tableName = "";
@@ -175,7 +180,7 @@ public class DbKit {
     public static String warpsavesql(Object entity, Map paramMap) {
         Class clazz = entity.getClass();
         List<String> fdNames = DbKit.getAllDBFields(clazz);
-        String tableName = DbKit.getTableNameByClass(clazz);
+        String tableName = DbKit.getTableName(entity);
         StringBuffer sql = new StringBuffer("INSERT INTO ").append(tableName).append("(");
         StringBuffer valueSql = new StringBuffer(" values(");
         for (int i = 0; i < fdNames.size(); i++) {
@@ -198,7 +203,7 @@ public class DbKit {
     public static String warpupdatesql(Object entity, Map paramMap) {
         Class clazz = entity.getClass();
         List<String> fdNames = DbKit.getAllDBFields(clazz);
-        String tableName = DbKit.getTableNameByClass(clazz);
+        String tableName = DbKit.getTableName(entity);
         StringBuffer sql = new StringBuffer("UPDATE ").append(tableName).append("  SET  ");
         StringBuffer whereSQL = new StringBuffer(" WHERE id").append("=:").append("id");
         for (int i = 0; i < fdNames.size(); i++) {
@@ -328,7 +333,35 @@ public class DbKit {
         }
     }
 
+    public static <T> String getTableName(Object entity) {
+        String defaultTableName = getBaseTableNameByClass(entity.getClass());
+        if (entity.getClass().isAnnotationPresent(TableRouterRule.class)) {
+            TableRouterRule rule = (TableRouterRule) entity.getClass().getAnnotation(TableRouterRule.class);
+            String key = rule.key();
+            String type = rule.type();
+            int count = rule.count();
+            // if ("hash".equals(type)) {
+            // defaultTableName = new DalHash().getTableName(model, key, count);
+            // } else if ("mod".equals(type)) {
+            // defaultTableName = new DalMod().getTableName(model, key, count);
+            // }
+            BaseRouterStrategy strategy = RouterManager.getRouters().get(type);
+            if (strategy != null) {
+                defaultTableName = strategy.getTableName(entity, key, count);
+            }
+            return defaultTableName;
+        } else {
+            // 不存在注解
+            return defaultTableName;
+        }
+
+    }
+
     public static void main(String[] args) throws Exception {
+        Student student = new Student();
+        student.setId(1L);
+        System.out.println(getTableName(student));
+
         // Map map=new HashMap<String ,Object>();
         // map.put("id","id");
         // map.put("username","kk");

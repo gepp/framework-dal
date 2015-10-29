@@ -7,7 +7,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jdk2010.framework.dal.client.support.DefaultShardingDalClient;
+import com.jdk2010.framework.dal.client.support.shard.DefaultShardingDalClient;
 
 public class ShardingDalClientPlugin extends DefaultShardingDalClient {
     Logger logger = LoggerFactory.getLogger(this.getClass());

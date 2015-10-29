@@ -1,4 +1,4 @@
-package com.jdk2010.framework.dal.client.support;
+package com.jdk2010.framework.dal.client.support.shard;
 
 import java.util.HashMap;
 import java.util.List;
@@ -176,7 +176,7 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
     }
 
     public Integer deleteByID(Object id, Class clazz) {
-        String tableName = DbKit.getTableNameByClass(clazz);
+        String tableName = DbKit.getTableName(clazz);
         String sql = "delete from " + tableName + " where id='" + id + "'";
         return update(new DbKit(sql));
     }
@@ -192,7 +192,7 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
         }
 
         String[] idStrs = ids.toString().split(",");
-        String tableName = DbKit.getTableNameByClass(clazz);
+        String tableName = DbKit.getTableName(clazz);
 
         for (String id : idStrs) {
             String sql = "delete from " + tableName + " where id='" + id + "'";
@@ -203,7 +203,7 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
     }
 
     public <T> T findById(Object id, Class clazz) {
-        String tableName = DbKit.getTableNameByClass(clazz);
+        String tableName = DbKit.getTableName(clazz);
         String sql = "select * from " + tableName + " where id='" + id + "'";
         return (T) queryForObject(new DbKit(sql), clazz);
     }

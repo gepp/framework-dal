@@ -8,9 +8,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.jdk2010.framework.dal.client.DalClient;
-import com.jdk2010.framework.dal.client.support.DbContextHolder;
 import com.jdk2010.framework.dal.client.support.DefaultDalClient;
-import com.jdk2010.framework.dal.client.support.DefaultShardingDalClient;
+import com.jdk2010.framework.dal.client.support.dynamicChange.DbContextHolder;
+import com.jdk2010.framework.dal.client.support.shard.DefaultShardingDalClient;
 import com.jdk2010.framework.dal.transaction.ChainedTransactionManager;
 import com.jdk2010.framework.util.DbKit;
 
