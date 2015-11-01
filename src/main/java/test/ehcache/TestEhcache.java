@@ -1,4 +1,4 @@
-package com.jdk2010.framework.test.ehcache;
+package test.ehcache;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

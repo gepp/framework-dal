@@ -1,11 +1,11 @@
-package com.jdk2010.framework.test.router;
+package test.router;
 
 import com.jdk2010.framework.dal.model.Model;
 import com.jdk2010.framework.dal.parse.annotation.TableField;
 import com.jdk2010.framework.dal.parse.annotation.TableRouterRule;
 
-@TableRouterRule(type = "mod", key = "id", count = 3)
-public class Student extends Model<Model> {
+@TableRouterRule(type = "userDefine", key = "name", count = 10)
+public class StudentUserDefine extends Model<Model> {
     private Long id;
     private String name;
     private String age;

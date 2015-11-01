@@ -1,4 +1,4 @@
-package com.jdk2010.framework.test.muliTransaction;
+package test.muliTransaction;
 
 import java.util.HashMap;
 import java.util.Map;

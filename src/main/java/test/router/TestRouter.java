@@ -1,4 +1,4 @@
-package com.jdk2010.framework.test.router;
+package test.router;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

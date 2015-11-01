@@ -11,13 +11,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import test.router.Student;
+
 import com.jdk2010.framework.dal.client.support.router.BaseRouterStrategy;
 import com.jdk2010.framework.dal.client.support.router.RouterManager;
 import com.jdk2010.framework.dal.exception.ExceptionUtil;
 import com.jdk2010.framework.dal.model.Model;
 import com.jdk2010.framework.dal.parse.annotation.TableField;
 import com.jdk2010.framework.dal.parse.annotation.TableRouterRule;
-import com.jdk2010.framework.test.router.Student;
 
 public class DbKit {
 
@@ -340,11 +341,6 @@ public class DbKit {
             String key = rule.key();
             String type = rule.type();
             int count = rule.count();
-            // if ("hash".equals(type)) {
-            // defaultTableName = new DalHash().getTableName(model, key, count);
-            // } else if ("mod".equals(type)) {
-            // defaultTableName = new DalMod().getTableName(model, key, count);
-            // }
             BaseRouterStrategy strategy = RouterManager.getRouters().get(type);
             if (strategy != null) {
                 defaultTableName = strategy.getTableName(entity, key, count);

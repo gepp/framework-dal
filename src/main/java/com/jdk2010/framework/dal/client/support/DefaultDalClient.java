@@ -14,10 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import com.jdk2010.framework.dal.client.DalClient;
-import com.jdk2010.framework.dal.client.support.router.BaseRouterStrategy;
 import com.jdk2010.framework.dal.client.support.router.RouterManager;
 import com.jdk2010.framework.dal.client.support.router.method.DalHash;
 import com.jdk2010.framework.dal.client.support.router.method.DalMod;
@@ -154,7 +156,9 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         Map paramMap = new HashMap();
         String sql = DbKit.warpsavesql(model, paramMap);
         logger.info(sql);
-        return jdbcTemplate.update(sql, paramMap);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sql, new MapSqlParameterSource(paramMap), keyHolder);
+        return keyHolder.getKey().intValue();
     }
 
     public Integer deleteByID(Object id, Class clazz) {

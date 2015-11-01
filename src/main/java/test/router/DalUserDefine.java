@@ -1,4 +1,4 @@
-package com.jdk2010.framework.test.router;
+package test.router;
 
 import com.jdk2010.framework.dal.client.support.router.BaseRouterStrategy;
 import com.jdk2010.framework.dal.exception.ExceptionUtil;
