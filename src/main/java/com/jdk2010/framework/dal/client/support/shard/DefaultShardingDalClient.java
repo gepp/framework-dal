@@ -11,7 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import com.jdk2010.framework.dal.client.DalClient;
 import com.jdk2010.framework.dal.dialect.IDialect;
@@ -172,9 +175,36 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
     public Integer save(Model model) {
         Map paramMap = new HashMap();
         String sql = DbKit.warpsavesql(model, paramMap);
-        return lookupDateSourceName(model).update(sql, paramMap);
+        logger.info(sql);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        lookupDateSourceName(model).update(sql, new MapSqlParameterSource(paramMap), keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+    @Override
+    public Integer save(DbKit dbKit) {
+        Map paramMap = dbKit.getParams();
+        logger.info(dbKit.getSql());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        lookupDateSourceName(paramMap).update(dbKit.getSql(), new MapSqlParameterSource(paramMap), keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+    
+    @Override
+    public Integer save(String sql,Map<String,Object> paramMap) {
+        logger.info(sql);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        lookupDateSourceName(paramMap).update(sql, new MapSqlParameterSource(paramMap), keyHolder);
+        return keyHolder.getKey().intValue();
     }
 
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        logger.info("初始化datasource...");
+        for (String key : dataSources.keySet()) {
+            shards.put(key, new NamedParameterJdbcTemplate(dataSources.get(key)));
+        }
+    }
     public Integer deleteByID(Object id, Class clazz) {
         String tableName = DbKit.getTableName(clazz);
         String sql = "delete from " + tableName + " where id='" + id + "'";
@@ -306,12 +336,7 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
 
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        logger.info("初始化datasource...");
-        for (String key : dataSources.keySet()) {
-            shards.put(key, new NamedParameterJdbcTemplate(dataSources.get(key)));
-        }
-    }
+
+
 
 }

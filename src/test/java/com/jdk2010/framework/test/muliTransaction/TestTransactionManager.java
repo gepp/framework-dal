@@ -1,4 +1,4 @@
-package test.muliTransaction;
+package com.jdk2010.framework.test.muliTransaction;
 
 import java.util.UUID;
 

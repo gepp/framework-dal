@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-lazy-init="false">
+	<bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<property name="slowSqlMillis" value="3000" />
+		<property name="logSlowSql" value="true" />
+	</bean>
+	<!-- 加载*.properties File -->
+	<bean id="dbConfPostProcessor"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:db.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="dataSourceMysql1" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName"><value>${db1.driver}</value></property>
+		<property name="url"><value>${db1.url}</value></property>
+ 		<property name="username"><value>${db1.username}</value></property>
+		<property name="password"><value>${db1.password}</value></property>
+		<property name="proxyFilters"><list><ref bean="stat-filter" /></list></property>
+		<property name="maxActive"><value>50</value></property>
+		<property name="initialSize"><value>5</value></property>
+		<property name="maxWait"><value>60000</value></property>
+		<property name="minIdle"><value>5</value></property>
+		<property name="removeAbandoned"><value>true</value></property>
+		<property name="logAbandoned" value="true" />
+		<property name="removeAbandonedTimeout"><value>1800</value></property>
+		<property name="testWhileIdle"><value>true</value></property> 
+		<!-- 打开检查,用异步线程evict进行检查 -->
+		<property name="testOnBorrow"><value>true</value></property>
+		<property name="testOnReturn"><value>false</value></property>
+		<property name="validationQuery"><value>select 1 </value></property>
+		<property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+		<property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+		<property name="numTestsPerEvictionRun"><value>50</value></property>
+	</bean>
+
+	 <bean id="dataSourceMysql2" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName"><value>${db2.driver}</value></property>
+		<property name="url"><value>${db2.url}</value></property>
+ 		<property name="username"><value>${db2.username}</value></property>
+		<property name="password"><value>${db2.password}</value></property>
+		<property name="proxyFilters"><list><ref bean="stat-filter" /></list></property>
+		<property name="maxActive"><value>50</value></property>
+		<property name="initialSize"><value>5</value></property>
+		<property name="maxWait"><value>60000</value></property>
+		<property name="minIdle"><value>5</value></property>
+		<property name="removeAbandoned"><value>true</value></property>
+		<property name="logAbandoned" value="true" />
+		<property name="removeAbandonedTimeout"><value>1800</value></property>
+		<property name="testWhileIdle"><value>true</value></property> 
+		<!-- 打开检查,用异步线程evict进行检查 -->
+		<property name="testOnBorrow"><value>true</value></property>
+		<property name="testOnReturn"><value>false</value></property>
+		<property name="validationQuery"><value>select 1 </value></property>
+		<property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+		<property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+		<property name="numTestsPerEvictionRun"><value>50</value></property>
+	</bean>
+	
+	<bean id="dataSourceMysql3" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName"><value>${db1.driver}</value></property>
+		<property name="url"><value>${db3.url}</value></property>
+ 		<property name="username"><value>${db3.username}</value></property>
+		<property name="password"><value>${db3.password}</value></property>
+		<property name="proxyFilters"><list><ref bean="stat-filter" /></list></property>
+		<property name="maxActive"><value>50</value></property>
+		<property name="initialSize"><value>5</value></property>
+		<property name="maxWait"><value>60000</value></property>
+		<property name="minIdle"><value>5</value></property>
+		<property name="removeAbandoned"><value>true</value></property>
+		<property name="logAbandoned" value="true" />
+		<property name="removeAbandonedTimeout"><value>1800</value></property>
+		<property name="testWhileIdle"><value>true</value></property> 
+		<!-- 打开检查,用异步线程evict进行检查 -->
+		<property name="testOnBorrow"><value>true</value></property>
+		<property name="testOnReturn"><value>false</value></property>
+		<property name="validationQuery"><value>select 1 </value></property>
+		<property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+		<property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+		<property name="numTestsPerEvictionRun"><value>50</value></property>
+	</bean>
+	
+  
+	
+	
+	<bean id="myShardingDalClient" class="com.jdk2010.framework.test.muliTransaction.ShardingDalClientPlugin">
+		<property name="dataSources">
+			<map key-type="java.lang.String">
+				<entry key="dataSourceMysql1" value-ref="dataSourceMysql1"></entry>
+				<entry key="dataSourceMysql2" value-ref="dataSourceMysql2"></entry>
+				<entry key="dataSourceMysql3" value-ref="dataSourceMysql3"></entry>
+			</map>
+		</property>
+		<property name="showSql" value="true"></property>
+		<property name="defaultDataSource" value="dataSourceMysql3"></property>
+ 	</bean>
+	
+	<bean id="transactionManager"
+		class="com.jdk2010.framework.dal.transaction.ChainedTransactionManager">
+		<property name="transactionManagers">
+			<list>
+			     <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+					<property name="dataSource" ref="dataSourceMysql1" />
+				 </bean>
+				  <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+					<property name="dataSource" ref="dataSourceMysql2" />
+				 </bean>
+				  <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+					<property name="dataSource" ref="dataSourceMysql3" />
+				 </bean>
+			</list>
+		</property>
+	</bean>
+	
+	  
+	
+	
+ </beans>

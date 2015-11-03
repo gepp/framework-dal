@@ -161,6 +161,23 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return keyHolder.getKey().intValue();
     }
 
+    @Override
+    public Integer save(String sql,Map<String,Object> paramMap) {
+        logger.info(sql);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sql, new MapSqlParameterSource(paramMap), keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+
+    @Override
+    public Integer save(DbKit dbKit) {
+        Map paramMap = dbKit.getParams();
+        logger.info(dbKit.getSql());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(dbKit.getSql(), new MapSqlParameterSource(paramMap), keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+
     public Integer deleteByID(Object id, Class clazz) {
         String tableName = DbKit.getTableName(clazz);
         String sql = "delete from " + tableName + " where id='" + id + "'";

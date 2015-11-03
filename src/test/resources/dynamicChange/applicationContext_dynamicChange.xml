@@ -96,39 +96,23 @@
 		<property name="numTestsPerEvictionRun"><value>50</value></property>
 	</bean>
 	
-  
-	
-	
-	<bean id="myShardingDalClient" class="com.jdk2010.framework.test.MyShardingDalClient">
-		<property name="dataSources">
-			<map key-type="java.lang.String">
-				<entry key="dataSourceMysql1" value-ref="dataSourceMysql1"></entry>
-				<entry key="dataSourceMysql2" value-ref="dataSourceMysql2"></entry>
-				<entry key="dataSourceMysql3" value-ref="dataSourceMysql3"></entry>
-			</map>
-		</property>
-		<property name="showSql" value="true"></property>
-		<property name="defaultDataSource" value="dataSourceMysql3"></property>
+    <bean id="dataSource" class="com.jdk2010.framework.dal.client.support.dynamicChange.DynamicDataSource">
+      <property name="targetDataSources">
+         <map key-type="java.lang.String">
+	        <entry key="dataSourceMysql1" value-ref="dataSourceMysql1"></entry>
+	        <entry key="dataSourceMysql2" value-ref="dataSourceMysql2"></entry>
+            <entry key="dataSourceMysql3" value-ref="dataSourceMysql3"></entry>
+         </map>
+       </property>
+    <!-- 默认目标数据源为你主库数据源 -->
+        <property name="defaultTargetDataSource" ref="dataSourceMysql1"/>
+    </bean>
+    
+    
+    <bean id="mySqlDal" class="com.jdk2010.framework.dal.client.support.DefaultDalClient">
+		<property name="dataSource" ref="dataSource"></property>
  	</bean>
 	
-	<bean id="transactionManager"
-		class="com.jdk2010.framework.dal.transaction.ChainedTransactionManager">
-		<property name="transactionManagers">
-			<list>
-			     <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-					<property name="dataSource" ref="dataSourceMysql1" />
-				 </bean>
-				  <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-					<property name="dataSource" ref="dataSourceMysql2" />
-				 </bean>
-				  <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-					<property name="dataSource" ref="dataSourceMysql3" />
-				 </bean>
-			</list>
-		</property>
-	</bean>
-	
-	  
 	
 	
  </beans>

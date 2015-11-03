@@ -1,37 +1,44 @@
-package test.router;
+package com.jdk2010.framework.test.router;
 
+import junit.framework.TestCase;
+
+import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.jdk2010.framework.dal.client.DalClient;
 import com.jdk2010.framework.dal.client.support.DefaultDalClient;
 import com.jdk2010.framework.dal.client.support.router.RouterManager;
+import com.jdk2010.framework.test.router.custom.StudentRuleCustom;
 import com.jdk2010.framework.util.DbKit;
 
-public class TestRouter {
+public class TestRouter extends TestCase{
+   
     public static void main(String[] args) {
-        testDefaultRouter();
+        new TestRouter().testModRouter();
     }
-
-    public static void testDefaultRouter() {
+    
+    @Test
+    public  void testModRouter() {
         BeanFactory factory = new ClassPathXmlApplicationContext("router/applicationContext_router.xml");
         DalClient client = (DefaultDalClient) factory.getBean("mySqlDal");
-        for (int i = 0; i < 100; i++) {
-            Student student = new Student();
-            student.setId(Long.parseLong(i + ""));
+        for (int i = 1; i < 100; i++) {
+            com.jdk2010.framework.test.router.mod.Student student = new com.jdk2010.framework.test.router.mod.Student();
+            student.setId(i);
             student.setName("student" + i);
             student.setAge(i + "");
             client.save(student);
         }
 
     }
-
-    public static void testUserDefineRouter() {
+    
+    @Test
+    public static void testUserCustomRouter() {
         BeanFactory factory = new ClassPathXmlApplicationContext("router/applicationContext_router.xml");
         DalClient client = (DefaultDalClient) factory.getBean("mySqlDal");
-        RouterManager.getRouters().put("userDefine", new DalUserDefine());
-        StudentUserDefine student = new StudentUserDefine();
-        student.setId(5L);
+        RouterManager.getRouters().put("custom", new StudentRuleCustom());
+        com.jdk2010.framework.test.router.custom.Student student = new com.jdk2010.framework.test.router.custom.Student();
+        student.setId(5);
         student.setName("5016");
         System.out.println(DbKit.getTableName(student));
     }

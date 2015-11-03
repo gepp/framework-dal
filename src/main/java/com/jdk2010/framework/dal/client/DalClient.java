@@ -19,6 +19,10 @@ public interface DalClient {
 
     public Integer save(Model model);
 
+    public Integer save(String sql,Map<String,Object> params);
+
+    public Integer save(DbKit dbKit);
+
     public Integer deleteByID(Object id, Class clazz);
 
     public Integer deleteByIDS(Object ids, Class clazz);
