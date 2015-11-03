@@ -7,15 +7,15 @@ import com.jdk2010.framework.util.StringUtils;
 
 public class StudentRuleCustom implements BaseRouterStrategy {
     /**
-     * ×Ô¶¨Òå¹æÔò
-     * Èç¹ûkeyÊÇ5016 ±íÃûÊÇÄÏ¾©
-     * Èç¹ûÊÇ1300 ±íÃûÊÇ¹ãÖİ
-     * Èç¹ûÊÇ2700 ±íÃûÊÇ³¤´º
+     * è‡ªå®šä¹‰è§„åˆ™
+     * å¦‚æœkeyæ˜¯5016 è¡¨åæ˜¯å—äº¬
+     * å¦‚æœæ˜¯1300 è¡¨åæ˜¯å¹¿å·
+     * å¦‚æœæ˜¯2700 è¡¨åæ˜¯é•¿æ˜¥
      */
     @Override
     public String getTableName(Object obj, String key, Integer count) {
         if (obj == null || StringUtils.isBlank(key) || count == null) {
-            ExceptionUtil.throwException(new RuntimeException("²ÎÊı²»ÍêÕû"));
+            ExceptionUtil.throwException(new RuntimeException("å‚æ•°ä¸å®Œæ•´"));
         }
         String tableName = DbKit.getBaseTableNameByClass(obj.getClass());
         String keyValue = DbKit.getPropertieValue(key, obj).toString();

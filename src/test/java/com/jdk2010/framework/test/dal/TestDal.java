@@ -16,7 +16,7 @@ public class TestDal extends TestCase {
         BeanFactory factory = new ClassPathXmlApplicationContext("router/applicationContext_router.xml");
         DalClient dalClient = factory.getBean(DalClient.class);
         int result = dalClient.update("insert into student0(name,age) values ('gpp','18')");
-        logger.info("Ó°Ïì½á¹û£º"+result+"");
+        logger.info("å½±å“ç»“æœï¼š"+result+"");
     }
 
     @Test
@@ -27,7 +27,7 @@ public class TestDal extends TestCase {
         student.setName("111ykk");
         student.setAge("90");
         int result=dalClient.save(student);
-        logger.info("·µ»Øid£º"+result+"");
+        logger.info("è¿”å›idï¼š"+result+"");
     }
     
     @Test
@@ -35,7 +35,7 @@ public class TestDal extends TestCase {
         BeanFactory factory = new ClassPathXmlApplicationContext("router/applicationContext_router.xml");
         DalClient dalClient = factory.getBean(DalClient.class);
         int result = dalClient.update("update student set age='20'");
-        logger.info("Ó°Ïì½á¹û£º"+result+"");
+        logger.info("å½±å“ç»“æœï¼š"+result+"");
     }
 
 }

@@ -22,7 +22,7 @@ public class TestRouter extends TestCase{
     public  void testModRouter() {
         BeanFactory factory = new ClassPathXmlApplicationContext("router/applicationContext_router.xml");
         DalClient client = (DefaultDalClient) factory.getBean("mySqlDal");
-        for (int i = 1; i < 100; i++) {
+        for (int i = 1; i < 10; i++) {
             com.jdk2010.framework.test.router.mod.Student student = new com.jdk2010.framework.test.router.mod.Student();
             student.setId(i);
             student.setName("student" + i);

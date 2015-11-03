@@ -12,16 +12,16 @@ import com.jdk2010.framework.dal.client.support.shard.DefaultShardingDalClient;
 public class ShardingDalClientPlugin extends DefaultShardingDalClient {
     
     /**
-     * 前提系统默认id是自增int unsign(b-tree) 如果是uuid类似，则hash之后再mod
-     * 自己写规则，例如 mod  3
-     * 6%3=0  return dataSource1   是applicationContext_shard.xml 中配置的 datasource名字
+     * 鍓嶆彁绯荤粺榛樿id鏄嚜澧瀒nt unsign(b-tree) 濡傛灉鏄痷uid绫讳技锛屽垯hash涔嬪悗鍐峬od
+     * 鑷繁鍐欒鍒欙紝渚嬪 mod  3
+     * 6%3=0  return dataSource1   鏄痑pplicationContext_shard.xml 涓厤缃殑 datasource鍚嶅瓧
      * 7%3=1  return dataSource2
      * 8%3=2  return dataSource3 
      * 
-     * 例如 参数中有个关键字,例如 
-     * 公司名称=1   return dataSource1
-     * 公司名称=2   return dataSource2
-     * 公司名称=3   return dataSource3
+     * 渚嬪 鍙傛暟涓湁涓叧閿瓧,渚嬪 
+     * 鍏徃鍚嶇О=1   return dataSource1
+     * 鍏徃鍚嶇О=2   return dataSource2
+     * 鍏徃鍚嶇О=3   return dataSource3
      */
     
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -38,7 +38,7 @@ public class ShardingDalClientPlugin extends DefaultShardingDalClient {
             if (parameterObject instanceof Map || parameterObject instanceof HashMap) {
                 map = (HashMap) parameterObject;
             } else {
-                map=BeanUtils.describe(parameterObject); // 实体转成map
+                map=BeanUtils.describe(parameterObject); // 瀹炰綋杞垚map
             }
             Integer id = Integer.parseInt((map.get("id").toString()));
 

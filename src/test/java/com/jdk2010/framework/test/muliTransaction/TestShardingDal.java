@@ -28,7 +28,7 @@ public class TestShardingDal extends TestCase {
         student.setAge("90");
         student.setId(81);
         int result = dalClient.save(student);
-        logger.info("·µ»Øid£º" + result + "");
+        logger.info("è¿”å›židï¼š" + result + "");
     }
 
     @Test
@@ -40,21 +40,21 @@ public class TestShardingDal extends TestCase {
         student.setAge("90");
         student.setId(86);
         int result = dalClient.save(student);
-        logger.info("·µ»Øid£º" + result + "");
+        logger.info("è¿”å›židï¼š" + result + "");
 
         Student student1 = new Student();
         student1.setName("111ykk");
         student1.setAge("90");
         student1.setId(87);
         result = dalClient.save(student1);
-        logger.info("·µ»Øid£º" + result + "");
+        logger.info("è¿”å›židï¼š" + result + "");
 
         Student student2 = new Student();
         student2.setName("111ykk");
         student2.setAge("90");
         student2.setId(88);
         result = dalClient.save(student2);
-        logger.info("·µ»Øid£º" + result + "");
+        logger.info("è¿”å›židï¼š" + result + "");
     }
 
     @Test
@@ -69,21 +69,21 @@ public class TestShardingDal extends TestCase {
             student.setAge("90");
             student.setId(90);
             int result = dalClient.save(student);
-            logger.info("·µ»Øid£º" + result + "");
+            logger.info("è¿”å›židï¼š" + result + "");
 
             Student student1 = new Student();
             student1.setName("111ykk");
             student1.setAge("90");
             student1.setId(94);
             result = dalClient.save(student1);
-            logger.info("·µ»Øid£º" + result + "");
+            logger.info("è¿”å›židï¼š" + result + "");
 
             Student student2 = new Student();
             student2.setName("111ykk");
             student2.setAge("90");
             student2.setId(88);
             result = dalClient.save(student2);
-            logger.info("·µ»Øid£º" + result + "");
+            logger.info("è¿”å›židï¼š" + result + "");
             manager.commit(transactionStatus);
         } catch (Exception e) {
             e.printStackTrace();
