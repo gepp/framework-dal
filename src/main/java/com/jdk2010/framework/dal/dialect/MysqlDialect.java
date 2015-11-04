@@ -2,8 +2,8 @@ package com.jdk2010.framework.dal.dialect;
 
 import org.springframework.stereotype.Component;
 
+import com.jdk2010.framework.util.DbKit;
 import com.jdk2010.framework.util.Page;
-import com.jdk2010.framework.util.StringUtils;
 
 @Component("mysqlDialect")
 public class MysqlDialect implements IDialect {
@@ -13,7 +13,7 @@ public class MysqlDialect implements IDialect {
         int pageSize = page.getPageSize();
         int pageNo = page.getPageIndex();
         StringBuffer sb = new StringBuffer(sql);
-        if (StringUtils.isNotBlank(orderby)) {
+        if (!DbKit.isBlank(orderby)) {
             sb.append(" ").append(orderby);
         }
         sb.append(" limit ").append(pageSize * (pageNo - 1)).append(",").append(pageSize);

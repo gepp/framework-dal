@@ -23,7 +23,7 @@ public class ModelInjector {
     public static <T> T inject(Class<?> modelClass, HttpServletRequest request, boolean skipConvertError)
             throws Exception {
         String modelName = modelClass.getSimpleName();
-        return (T) inject(modelClass, StringUtils.firstCharToLowerCase(modelName), request, skipConvertError);
+        return (T) inject(modelClass, DbKit.firstCharToLowerCase(modelName), request, skipConvertError);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -56,7 +56,7 @@ public class ModelInjector {
             if (types.length != 1) // only one parameter
                 continue;
             String attrName = methodName.substring(3);
-            String value = request.getParameter(modelName + "." + StringUtils.firstCharToLowerCase(attrName));
+            String value = request.getParameter(modelName + "." + DbKit.firstCharToLowerCase(attrName));
             if (value != null) {
                 try {
                     method.invoke(model, TypeConverter.convert(types[0], value));

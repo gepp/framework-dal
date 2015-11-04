@@ -31,7 +31,6 @@ import com.jdk2010.framework.dal.exception.ExceptionUtil;
 import com.jdk2010.framework.dal.model.Model;
 import com.jdk2010.framework.util.DbKit;
 import com.jdk2010.framework.util.Page;
-import com.jdk2010.framework.util.StringUtils;
 
 public class DefaultDalClient implements DalClient, InitializingBean {
 
@@ -162,7 +161,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
     }
 
     @Override
-    public Integer save(String sql,Map<String,Object> paramMap) {
+    public Integer save(String sql, Map<String, Object> paramMap) {
         logger.info(sql);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, new MapSqlParameterSource(paramMap), keyHolder);
@@ -255,11 +254,11 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         String sql = dbKit.getSql();
         String orderSql = dbKit.getOrderSql();
         Map<String, Object> paramMap = dbKit.getParams();
-        if (StringUtils.isBlank(sql)) {
+        if (DbKit.isBlank(sql)) {
             return null;
         }
-        if (page != null && StringUtils.isNotBlank(page.getOrder())) {// 如果page中包含
-                                                                      // 排序属性
+        if (page != null && !DbKit.isBlank(page.getOrder())) {// 如果page中包含
+                                                              // 排序属性
             String _order = page.getOrder().trim();
             if (_order.indexOf(" ") > -1 || _order.indexOf(";") > -1) {// 认为是异常的,主要是防止注入
                 orderSql = " order by id asc ";

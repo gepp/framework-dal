@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 import com.jdk2010.framework.dal.client.support.router.BaseRouterStrategy;
 import com.jdk2010.framework.dal.client.support.router.RouterManager;
 import com.jdk2010.framework.dal.exception.ExceptionUtil;
@@ -95,9 +94,9 @@ public class DbKit {
         }
 
         Set<String> allNames = getAllFieldNames(clazz);
-        if (StringUtils.isBlank(allNames))
+        if (allNames == null || allNames.isEmpty()) {
             return null;
-
+        }
         List<String> dbList = new ArrayList<String>();
         for (String fdName : allNames) {
             boolean isDB = isAnnotation(clazz, fdName, TableField.class);
@@ -280,7 +279,7 @@ public class DbKit {
     }
 
     public static String replaceFormatSqlFrom(String sql) {
-        if (StringUtils.isBlank(sql)) {
+        if (sql == null || sql.trim().length() == 0) {
             return sql;
         }
         sql = sql.toLowerCase();
@@ -353,8 +352,22 @@ public class DbKit {
 
     }
 
+    public static boolean isBlank(String str) {
+        return (str == null || str.trim().length() == 0) ? true : false;
+    }
+    
+    /**
+     * 首字母变小写
+     */
+    public static String firstCharToLowerCase(String str) {
+        Character firstChar = str.charAt(0);
+        String tail = str.substring(1);
+        str = Character.toLowerCase(firstChar) + tail;
+        return str;
+    }
+
     public static void main(String[] args) throws Exception {
-        
+
         // Map map=new HashMap<String ,Object>();
         // map.put("id","id");
         // map.put("username","kk");

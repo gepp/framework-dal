@@ -1,5 +1,6 @@
 package com.jdk2010.framework.test.dal;
 import junit.framework.TestCase;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

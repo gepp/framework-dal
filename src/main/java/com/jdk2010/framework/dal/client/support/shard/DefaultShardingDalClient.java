@@ -22,7 +22,6 @@ import com.jdk2010.framework.dal.exception.ExceptionUtil;
 import com.jdk2010.framework.dal.model.Model;
 import com.jdk2010.framework.util.DbKit;
 import com.jdk2010.framework.util.Page;
-import com.jdk2010.framework.util.StringUtils;
 
 public abstract class DefaultShardingDalClient implements DalClient, InitializingBean {
 
@@ -180,6 +179,7 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
         lookupDateSourceName(model).update(sql, new MapSqlParameterSource(paramMap), keyHolder);
         return keyHolder.getKey().intValue();
     }
+
     @Override
     public Integer save(DbKit dbKit) {
         Map paramMap = dbKit.getParams();
@@ -188,15 +188,14 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
         lookupDateSourceName(paramMap).update(dbKit.getSql(), new MapSqlParameterSource(paramMap), keyHolder);
         return keyHolder.getKey().intValue();
     }
-    
+
     @Override
-    public Integer save(String sql,Map<String,Object> paramMap) {
+    public Integer save(String sql, Map<String, Object> paramMap) {
         logger.info(sql);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         lookupDateSourceName(paramMap).update(sql, new MapSqlParameterSource(paramMap), keyHolder);
         return keyHolder.getKey().intValue();
     }
-
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -205,6 +204,7 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
             shards.put(key, new NamedParameterJdbcTemplate(dataSources.get(key)));
         }
     }
+
     public Integer deleteByID(Object id, Class clazz) {
         String tableName = DbKit.getTableName(clazz);
         String sql = "delete from " + tableName + " where id='" + id + "'";
@@ -282,10 +282,10 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
         String sql = dbKit.getSql();
         String orderSql = dbKit.getOrderSql();
         Map<String, Object> paramMap = dbKit.getParams();
-        if (StringUtils.isBlank(sql)) {
+        if (DbKit.isBlank(sql)) {
             return null;
         }
-        if (page != null && StringUtils.isNotBlank(page.getOrder())) {
+        if (page != null && !DbKit.isBlank(page.getOrder())) {
             String _order = page.getOrder().trim();
             if (_order.indexOf(" ") > -1 || _order.indexOf(";") > -1) {
                 orderSql = " order by id asc ";
@@ -335,8 +335,5 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
         return temp;
 
     }
-
-
-
 
 }

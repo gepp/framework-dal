@@ -2,8 +2,8 @@ package com.jdk2010.framework.dal.dialect;
 
 import org.springframework.stereotype.Component;
 
+import com.jdk2010.framework.util.DbKit;
 import com.jdk2010.framework.util.Page;
-import com.jdk2010.framework.util.StringUtils;
 
 @Component("oracleDialect")
 public class OracleDialect implements IDialect {
@@ -16,7 +16,7 @@ public class OracleDialect implements IDialect {
         StringBuffer sb = new StringBuffer();
         sb.append("select * from ( select  rownum frame_page_sql_row_number ,frame_sql_temp_table1.* from (");
         sb.append(sql);
-        if (StringUtils.isNotBlank(orderby)) {
+        if (DbKit.isBlank(orderby)) {
             sb.append(" ").append(orderby);
         }
         sb.append(") frame_sql_temp_table1 where rownum <= ").append(end).append(") frame_sql_temp_table2");

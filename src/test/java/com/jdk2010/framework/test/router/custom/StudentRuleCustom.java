@@ -3,7 +3,6 @@ package com.jdk2010.framework.test.router.custom;
 import com.jdk2010.framework.dal.client.support.router.BaseRouterStrategy;
 import com.jdk2010.framework.dal.exception.ExceptionUtil;
 import com.jdk2010.framework.util.DbKit;
-import com.jdk2010.framework.util.StringUtils;
 
 public class StudentRuleCustom implements BaseRouterStrategy {
     /**
@@ -14,7 +13,7 @@ public class StudentRuleCustom implements BaseRouterStrategy {
      */
     @Override
     public String getTableName(Object obj, String key, Integer count) {
-        if (obj == null || StringUtils.isBlank(key) || count == null) {
+        if (obj == null || DbKit.isBlank(key) || count == null) {
             ExceptionUtil.throwException(new RuntimeException("参数不完整"));
         }
         String tableName = DbKit.getBaseTableNameByClass(obj.getClass());
