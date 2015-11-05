@@ -65,23 +65,24 @@ public class TestShardingDal extends TestCase {
         TransactionStatus transactionStatus = manager.getTransaction(new DefaultTransactionDefinition());
         try {
             Student student = new Student();
+            student.setId(1);
             student.setName("111ykk");
             student.setAge("90");
-            student.setId(90);
             int result = dalClient.save(student);
             logger.info("返回id：" + result + "");
 
             Student student1 = new Student();
+            student1.setId(1);
             student1.setName("111ykk");
             student1.setAge("90");
-            student1.setId(94);
             result = dalClient.save(student1);
             logger.info("返回id：" + result + "");
 
             Student student2 = new Student();
+            student2.setId(1);
             student2.setName("111ykk");
             student2.setAge("90");
-            student2.setId(88);
+            
             result = dalClient.save(student2);
             logger.info("返回id：" + result + "");
             manager.commit(transactionStatus);
