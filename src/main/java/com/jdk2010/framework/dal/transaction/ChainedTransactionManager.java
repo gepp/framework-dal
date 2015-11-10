@@ -5,10 +5,6 @@ package com.jdk2010.framework.dal.transaction;
  * https://github.com/spring-projects/spring-data-graph/tree/master/spring-data-neo4j/src/main/java/org/springframework/data/neo4j
  * 
  */
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -34,19 +30,6 @@ public class ChainedTransactionManager implements PlatformTransactionManager, In
     public void setTransactionManagers(List<PlatformTransactionManager> transactionManagers) {
         this.transactionManagers = transactionManagers;
     }
-
- 
-    // public ChainedTransactionManager(
-    // PlatformTransactionManager... transactionManagers) {
-    // this(new DefaultSynchronizationManager(), transactionManagers);
-    // }
-    //
-    // public ChainedTransactionManager(
-    // SynchronizationManager synchronizationManager,
-    // PlatformTransactionManager... transactionManagers) {
-    // this.synchronizationManager = synchronizationManager;
-    // this.transactionManagers = Arrays.asList(transactionManagers);
-    // }
 
     @Override
     public MultiTransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException {
