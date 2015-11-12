@@ -15,8 +15,9 @@
 		http://www.springframework.org/schema/aop/spring-aop.xsd"
 	default-lazy-init="false">
  
- <bean id="ehcacheProvider" class="com.jdk2010.framework.dal.cache.support.EhcacheProvider">
- 	<property name="cacheConfigLocation" value="classpath:ehCache/ehcache.xml"></property>
- 	<property name="defaultCacheName" value="defaultMetaCache"></property>
-  </bean>
+ <bean id="ehCacheCacheManager" class="com.jdk2010.framework.dal.cache.support.ehcache.EhCacheCacheManager">
+ 	<property name="cacheConfigLocation" value="ehCache/ehcache.xml" />
+   </bean>
+  
+   
  </beans>
