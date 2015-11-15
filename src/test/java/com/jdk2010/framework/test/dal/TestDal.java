@@ -20,6 +20,7 @@ import com.jdk2010.framework.dal.client.DalClient;
 public class TestDal extends TestCase {
     private static Logger logger = LoggerFactory.getLogger(TestDal.class);
 
+ 
     @Test
     public void testBaseDalInsert() {
         BeanFactory factory = new ClassPathXmlApplicationContext("router/applicationContext_router.xml");
@@ -51,24 +52,30 @@ public class TestDal extends TestCase {
     public void testThreadUpdate() {
         final BeanFactory factory = new ClassPathXmlApplicationContext("dal/applicationContext.xml");
         final DalClient dalClient = factory.getBean(DalClient.class);
-        ExecutorService service=Executors.newFixedThreadPool(1000);
-        for (int i = 0; i < 2000; i++) {
-            service.execute(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            String age = dalClient.queryColumn("select age from student where id=1 ", "age");
-                            Integer ageInt = Integer.parseInt(age) + 1;
-                            logger.info(ageInt+"");
-                            dalClient.update("update student set age=" + ageInt + " where id=1");
-                        }
+        ExecutorService service = Executors.newFixedThreadPool(10);
+        for (int i = 0; i < 100; i++) {
+            service.execute(new Runnable() {
+                @Override
+                public void run() {
+                    DataSourceTransactionManager manager = (DataSourceTransactionManager) factory
+                            .getBean("transactionManager");
+                    TransactionStatus status = manager.getTransaction(new DefaultTransactionDefinition());
+                    try {
+
+                        String age = dalClient.queryColumn("select age from student where id=1 for update", "age");
+                        Integer ageInt = Integer.parseInt(age) + 1;
+                        logger.info(ageInt + "");
+                        dalClient.update("update student set age=" + ageInt + " where id=1");
+                        manager.commit(status);
+                    } catch (Exception e) {
+                        manager.rollback(status);
                     }
-                    );
-            
-          
+                }
+            });
+
         }
         service.shutdown();
-        
+
     }
 
     public static void main(String[] args) {
