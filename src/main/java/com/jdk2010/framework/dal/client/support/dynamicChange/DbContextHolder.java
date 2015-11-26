@@ -25,5 +25,19 @@ public class DbContextHolder {
         logger.info("当前数据源切换为默认数据源...");
 		contextHolder.remove();
 	}
+	public static void main(String[] args) throws InterruptedException {
+	    DbContextHolder.setDataSourceName("aaa");
+	    System.out.println("1."+DbContextHolder.getDataSourceName());
+	    new Thread(new  Runnable() {
+            
+            @Override
+            public void run() {
+                DbContextHolder.setDataSourceName("bbb");
+                System.out.println("2."+DbContextHolder.getDataSourceName());
+            }
+        }).start();
+	    Thread.sleep(1000);
+	    System.out.println("3."+DbContextHolder.getDataSourceName());
+    }
 
 }

@@ -75,21 +75,19 @@ public class RedisCacheManager extends AbstractCacheManager implements Initializ
     public void setJedisPool(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
     }
+    
+    
 
     @Override
     public Cache getCache(String name) {
-
         if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("error name");
         }
-
         Cache cache = super.getCache(name);
-
         if (cache == null) {
             addCache(name, new RedisCache(name, jedisPool));
             cache = super.getCache(name); // potentially decorated
         }
-
         return cache;
     }
 

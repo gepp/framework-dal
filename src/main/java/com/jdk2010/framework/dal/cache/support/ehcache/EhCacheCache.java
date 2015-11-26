@@ -70,4 +70,6 @@ public class EhCacheCache implements Cache {
     public long size() throws CacheException {
         return ehcache.getSize();
     }
+
+  
 }

@@ -17,7 +17,7 @@ public class RedisCache implements Cache {
     public RedisCache(String name, Jedis jedis) {
 
         if (jedis == null) {
-            throw new CacheException("error jedis");
+            throw new CacheException("jedis is null");
         }
         this.name = name;
         this.jedis = jedis;
@@ -25,7 +25,7 @@ public class RedisCache implements Cache {
 
     public RedisCache(String name, JedisPool jedisPool) {
         if (jedisPool == null) {
-            throw new CacheException("error jedisPool");
+            throw new CacheException("jedisPool is null");
         }
         this.name = name;
         this.jedis = jedisPool.getResource();
@@ -65,10 +65,9 @@ public class RedisCache implements Cache {
     public void evict(Object key) throws CacheException {
 
         if (key == null) {
-            throw new CacheException("error jedis");
+            throw new CacheException("key is null");
         }
         Long ret = jedis.del(key.toString());
-        // return ret == 1 ? true : false;
     }
 
     @Override

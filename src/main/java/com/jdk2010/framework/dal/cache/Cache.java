@@ -5,7 +5,7 @@ import java.util.Set;
 import com.jdk2010.framework.dal.cache.exception.CacheException;
 
 public interface Cache {
-    
+
     /**
      * 返回缓存的名称
      * 
@@ -54,4 +54,6 @@ public interface Cache {
      * @return key-value个数
      */
     long size() throws CacheException;
+
+ 
 }
