@@ -12,12 +12,13 @@ public class TestEhcache extends TestCase {
     public static void main(String[] args) {
         new TestEhcache().testCache();
     }
+
     @Test
     public void testCache() {
         BeanFactory factory = new ClassPathXmlApplicationContext("ehCache/applicationContext.xml");
         EhCacheCacheManager ehCacheCacheManager = (EhCacheCacheManager) factory.getBean("ehCacheCacheManager");
-        ehCacheCacheManager.getCache("metaCache").put("aaa","bbb");
-        System.out.println(ehCacheCacheManager.getCache("metaCache").get("aaa"));
+        ehCacheCacheManager.getEhCache("metaCache").put("aaa", "bbb");
+        System.out.println(ehCacheCacheManager.getEhCache("metaCache").get("aaa"));
 
     }
 }
