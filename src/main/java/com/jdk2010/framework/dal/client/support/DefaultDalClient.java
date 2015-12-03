@@ -96,7 +96,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         } catch (EmptyResultDataAccessException e) {
             t = null;
             logger.error(e.getMessage());
-            throw e;
+//            throw e;
 
         } finally {
 
