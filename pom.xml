@@ -6,7 +6,7 @@
 	<packaging>jar</packaging>
 	<groupId>com.jdk2010.framework</groupId>
 	<artifactId>framework-dal</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.5</version>
 	<properties>
 		<spring.version>4.1.0.RELEASE</spring.version>
 		<mysql-connector-java.version>5.1.32</mysql-connector-java.version>
@@ -126,11 +126,11 @@
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
-			<url>http://localhost:8081/nexus/content/repositories/releases</url>
+			<url>http://maven.cnsuning.com/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
-			<url>http://localhost:8081/nexus/content/repositories/snapshots</url>
+			<url>http://maven.cnsuning.com/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>
