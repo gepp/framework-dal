@@ -3,15 +3,14 @@ package com.jdk2010.framework.dal.cache.support.redis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.util.StringUtils;
+
+import com.jdk2010.framework.dal.exception.ExceptionUtil;
 
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import com.jdk2010.framework.dal.cache.AbstractCacheManager;
-import com.jdk2010.framework.dal.cache.Cache;
-
-public class RedisCacheManager extends AbstractCacheManager implements InitializingBean {
+public class RedisCacheManager implements InitializingBean {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -66,7 +65,6 @@ public class RedisCacheManager extends AbstractCacheManager implements Initializ
     public void setRedisConfig(JedisPoolConfig redisConfig) {
         this.redisConfig = redisConfig;
     }
-     
 
     public JedisPool getJedisPool() {
         return jedisPool;
@@ -75,28 +73,19 @@ public class RedisCacheManager extends AbstractCacheManager implements Initializ
     public void setJedisPool(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
     }
-
-    @Override
-    public Cache getCache(String name) {
-
-        if (name == null || name.length() == 0) {
-            throw new IllegalArgumentException("error name");
-        }
-
-        Cache cache = super.getCache(name);
-
-        if (cache == null) {
-            addCache(name, new RedisCache(name, jedisPool));
-            cache = super.getCache(name); // potentially decorated
-        }
-
-        return cache;
+    
+    public RedisSimpleTempalte getRedis(){
+        return new RedisSimpleTempalte(new RedisClient(jedisPool));
     }
-
+    
     @Override
     public void afterPropertiesSet() throws Exception {
+        if (StringUtils.isEmpty(host) || StringUtils.isEmpty(port)) {
+            logger.error("host/port is null");
+            ExceptionUtil.throwException(new RuntimeException("host/port is null"));
+        }
         jedisPool = new JedisPool(redisConfig, host, port, timeout);
-        logger.info("redis 初始化成功......");
+        logger.info("redis init success......");
     }
 
 }

@@ -33,16 +33,17 @@ public class TestRedis extends TestCase {
     private static final int totalCount=30000;
     
     public static void main(String[] args) throws InterruptedException {
-        new TestRedis().testRedisThreadUpdate();
-        new TestRedis().testThreadUpdate();
+//        new TestRedis().testRedisThreadUpdate();
+//        new TestRedis().testThreadUpdate();
+        testCache();
     }
 
     @Test
-    public void testCache() {
+    public static void testCache() {
         BeanFactory factory = new ClassPathXmlApplicationContext("redis/applicationContext.xml");
         RedisCacheManager redisCacheManager = (RedisCacheManager) factory.getBean("redisCacheManager");
-        JedisPool jedisPool = redisCacheManager.getJedisPool();
-        jedisPool.getResource().incr("a");
+       for(int i=0;i<100;i++)
+        redisCacheManager.getRedis().incr("a");
     }
 
     @Test
@@ -51,7 +52,7 @@ public class TestRedis extends TestCase {
         BeanFactory factory = new ClassPathXmlApplicationContext("redis/applicationContext.xml");
         final RedisCacheManager redisCacheManager = (RedisCacheManager) factory.getBean("redisCacheManager");
         final JedisPool jedisPool = redisCacheManager.getJedisPool();
-        redisCacheManager.getCache("redisDefault").put("quantity", 0);
+        redisCacheManager.getRedis().set("quantity", 0+"");
         final Map<String, Object> map = new HashMap<String, Object>();
         final ExecutorService service = Executors.newFixedThreadPool(threadTotal);
         for (int i = 0; i < totalCount; i++) {
@@ -76,7 +77,7 @@ public class TestRedis extends TestCase {
             Thread.sleep(5);
             if (threadCount == 0) {
                 logger.info("map.size():" + map.size());
-                int last_quantity = Integer.parseInt(redisCacheManager.getCache("redisDefault").get("quantity")
+                int last_quantity = Integer.parseInt(redisCacheManager.getRedis().get("quantity")
                         .toString());
                 long end=System.currentTimeMillis();
                 logger.info("最终结果" + last_quantity);
