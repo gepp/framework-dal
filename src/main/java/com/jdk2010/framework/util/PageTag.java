@@ -1,133 +1,131 @@
 package com.jdk2010.framework.util;
 
+
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.jdk2010.framework.util.Page;
+public class PageTag extends TagSupport
+{
+  private String data = "pageList";
+  private String href;
+  private StringBuffer output;
 
-public class PageTag extends TagSupport {
+  public String getData()
+  {
+    return this.data;
+  }
 
-    private String data = "pageList";// 数据集合名字
-    private String href; // 连接地址
-    private StringBuffer output; // 页面输出
+  public void setData(String data) {
+    this.data = data;
+  }
 
-    public String getData() {
-        return data;
+  public String getHref() {
+    return this.href;
+  }
+
+  public void setHref(String href) {
+    this.href = href;
+  }
+
+  public StringBuffer getOutput() {
+    return this.output;
+  }
+
+  public void setOutput(StringBuffer output) {
+    this.output = output;
+  }
+
+  public int doEndTag() throws JspException
+  {
+    return super.doEndTag();
+  }
+
+  public int doStartTag() throws JspException
+  {
+    try {
+      this.output = new StringBuffer();
+      hander();
+      this.pageContext.getOut().write(this.output.toString());
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+    return 0;
+  }
 
-    public void setData(String data) {
-        this.data = data;
+  private void hander() {
+    if (this.href.indexOf("?") < 0) {
+      this.href += "?";
     }
-
-    public String getHref() {
-        return href;
+    if ((this.href.endsWith("?")) || (this.href.endsWith("&amp;")))
+      this.href += "pageIndex=";
+    else {
+      this.href += "&amp;pageIndex=";
     }
+    Page pageList = (Page)this.pageContext.getRequest().getAttribute(this.data);
+    if (pageList != null) {
+      StringBuffer page = new StringBuffer();
+      int pageNumber = Integer.valueOf(pageList.getPageIndex()).intValue();
+      int totalPage = Integer.valueOf(pageList.getTotalPage()).intValue();
+      int totalRow = Integer.valueOf(pageList.getTotalCount()).intValue();
+      int startPage = pageNumber - 4;
+      int endPage = pageNumber + 4;
 
-    public void setHref(String href) {
-        this.href = href;
-    }
+      if (totalRow == 0) {
+        pageNumber = 0;
+      }
 
-    public StringBuffer getOutput() {
-        return output;
-    }
+      if (startPage < 1) {
+        startPage = 1;
+      }
 
-    public void setOutput(StringBuffer output) {
-        this.output = output;
-    }
+      if (endPage > totalPage) {
+        endPage = totalPage;
+      }
 
-    @Override
-    public int doEndTag() throws JspException {
-        return super.doEndTag();
-    }
+      if (pageNumber <= 8) {
+        startPage = 1;
+      }
+      if (totalPage - pageNumber < 8) {
+        endPage = totalPage;
+      }
 
-    @Override
-    public int doStartTag() throws JspException {
-        try {
-            output = new StringBuffer();
-            hander();
-            this.pageContext.getOut().write(output.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
+      page.append("<div class=\"pagin  \"><div class=\"message\">共<i class=\"blue\">"+totalRow+"</i>条记录，当前显示第&nbsp;<i class=\"blue\">"+pageNumber+"&nbsp;</i>页</div><ul class=\"paginList\">");
+
+      if (pageNumber <= 1) {
+        page.append("<li class=\"paginItem\"><a href=\"javascript:;\"><span  class=\"pagepre\"></span></a></li>");
+      }
+      if (pageNumber > 1) {
+        page.append("<li class=\"paginItem\" ><a href=\"" + this.href + (pageNumber - 1) + " \"><span  class=\"pagepre\"></span></a></li>");
+      }
+      if (pageNumber > 8) {
+        page.append("<li class=\"paginItem\" ><a href=\"" + this.href + "1 \">1</a></li>")
+          .append("<li class=\"paginItem\" ><a href=\"" + this.href + "2 \">2</a></li>")
+          .append("<li class=\"paginItem more\"> <a href='#'>...</a></li>");
+      }
+
+      for (int i = startPage; i <= endPage; i++) {
+        if (pageNumber == i)
+          page.append("<li class=\"paginItem current\"><a href='#'>" + i + "</a></li>");
+        else {
+          page.append("<li class=\"paginItem\"><a href=\"" + this.href + i + " \">" + i + "</a></li>");
         }
-        return SKIP_BODY;
+      }
+      if (totalPage - pageNumber >= 8) {
+        page.append("<li class=\"paginItem more\"> <a href='#'>...</a></li>")
+          .append("<li class=\"paginItem\"><a href=\"" + this.href + (totalPage - 1) + " \">" + (totalPage - 1) + "</a></li>")
+          .append("<li class=\"paginItem\"><a href=\"" + this.href + totalPage + " \">" + totalPage + "</a></li>");
+      }
+
+      if (pageNumber == totalPage)
+        page.append("<li class=\"paginItem\"><a href='#'><span class=\"pagenxt\"></span></a></li>");
+      else {
+        page.append("<li class=\"paginItem\"><a href=\"" + this.href + (pageNumber + 1) + " \"><span  class=\"pagenxt\"></span></a></li>");
+      }
+
+      page.append("</ul></div>");
+      this.output.append(page);
     }
-
-    private void hander() {
-        // 如果URL不包�? 则添�?
-        if (href.indexOf("?") < 0) {
-            href += "?";
-        }
-        if (href.endsWith("?") || href.endsWith("&amp;")) {
-            href += "pageIndex=";
-        } else {
-            href += "&amp;pageIndex=";
-        }
-        Page pageList = (Page) this.pageContext.getRequest().getAttribute(data);
-        if (pageList != null) {
-            StringBuffer page = new StringBuffer();
-            int pageNumber = Integer.valueOf(pageList.getPageIndex());
-            int totalPage = Integer.valueOf(pageList.getTotalPage());
-            int totalRow = Integer.valueOf(pageList.getTotalCount());
-            int startPage = pageNumber - 4;
-            int endPage = pageNumber + 4;
-
-            if (totalRow == 0) {
-                pageNumber = 0;
-            }
-
-            if (startPage < 1) {
-                startPage = 1;
-            }
-
-            if (endPage > totalPage) {
-                endPage = totalPage;
-            }
-
-            if (pageNumber <= 8) {
-                startPage = 1;
-            }
-            if (totalPage - pageNumber < 8) {
-                endPage = totalPage;
-            }
-
-            page.append("<div class=\"pagination pull-right \"><ul>");
-
-            if (pageNumber <= 1) {
-                page.append("<li><a href='#'>上一�?/a></li>");
-            }
-            if (pageNumber > 1) {
-                page.append("<li><a href=\"" + href + (pageNumber - 1) + " \">上一�?/a></li>");
-            }
-            if (pageNumber > 8) {
-                page.append("<li><a href=\"" + href + "1 \">1</a></li>")
-                        .append("<li><a href=\"" + href + "2 \">2</a></li>").append("<a href='#'>...</a>");
-            }
-
-            for (int i = startPage; i <= endPage; i++) {
-                if (pageNumber == i) {
-                    page.append("<li class=\"active\"><a href='#'>" + i + "</a></li>");
-                } else {
-                    page.append("<li><a href=\"" + href + i + " \">" + i + "</a></li>");
-                }
-            }
-            if (totalPage - pageNumber >= 8) {
-                page.append("<a href='#'>...</a>")
-                        .append("<li><a href=\"" + href + (totalPage - 1) + " \">" + (totalPage - 1) + "</a></li>")
-                        .append("<li><a href=\"" + href + (totalPage) + " \">" + (totalPage) + "</a></li>");
-            }
-
-            if (pageNumber == totalPage) {
-                page.append("<li><a href='#'>下一�?/a></li>");
-            } else {
-                page.append("<li><a href=\"" + href + (pageNumber + 1) + " \">下一�?/a></li>");
-
-            }
-
-            page.append("</ul></div>");
-            output.append(page);
-        }
-    }
-
+  }
 }

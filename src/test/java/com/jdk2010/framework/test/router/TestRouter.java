@@ -40,6 +40,6 @@ public class TestRouter extends TestCase{
         com.jdk2010.framework.test.router.custom.Student student = new com.jdk2010.framework.test.router.custom.Student();
         student.setId(5);
         student.setName("5016");
-        System.out.println(DbKit.getTableName(student));
+        System.out.println(DbKit.getTableName(student.getClass()));
     }
 }

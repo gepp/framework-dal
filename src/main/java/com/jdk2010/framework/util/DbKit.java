@@ -180,7 +180,7 @@ public class DbKit {
     public static String warpsavesql(Object entity, Map paramMap) {
         Class clazz = entity.getClass();
         List<String> fdNames = DbKit.getAllDBFields(clazz);
-        String tableName = DbKit.getTableName(entity);
+        String tableName = DbKit.getTableName(clazz);
         StringBuffer sql = new StringBuffer("INSERT INTO ").append(tableName).append("(");
         StringBuffer valueSql = new StringBuffer(" values(");
         for (int i = 0; i < fdNames.size(); i++) {
@@ -203,7 +203,7 @@ public class DbKit {
     public static String warpupdatesql(Object entity, Map paramMap) {
         Class clazz = entity.getClass();
         List<String> fdNames = DbKit.getAllDBFields(clazz);
-        String tableName = DbKit.getTableName(entity);
+        String tableName = DbKit.getTableName(clazz);
         StringBuffer sql = new StringBuffer("UPDATE ").append(tableName).append("  SET  ");
         StringBuffer whereSQL = new StringBuffer(" WHERE id").append("=:").append("id");
         for (int i = 0; i < fdNames.size(); i++) {
@@ -333,8 +333,8 @@ public class DbKit {
         }
     }
 
-    public static <T> String getTableName(Object entity) {
-        String defaultTableName = getBaseTableNameByClass(entity.getClass());
+    public static <T> String getTableName(Class entity) {
+        String defaultTableName = getBaseTableNameByClass(entity);
         if (entity.getClass().isAnnotationPresent(TableRouterRule.class)) {
             TableRouterRule rule = (TableRouterRule) entity.getClass().getAnnotation(TableRouterRule.class);
             String key = rule.key();

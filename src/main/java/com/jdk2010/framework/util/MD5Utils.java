@@ -80,6 +80,7 @@ public class MD5Utils {
     }
 
     public static void main(String[] args) {
-        System.out.println(md5("1"));
+        System.out.println(md5("1"));//c4ca4238a0b923820dcc509a6f75849b
+
     }
 }

@@ -416,7 +416,7 @@ public class BaseController {
 
     public Page getPage() {
         int pageIndex = 1;
-        int pageSize = 10;
+        int pageSize = 20;
         String orderBy = getPara("orderBy");
         String sort = getPara("sort");
 
