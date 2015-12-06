@@ -128,7 +128,7 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
         return queryForObject(new DbKit(sql), clazz);
     }
 
-    public List<Map<String, Object>> queryForList(DbKit dbKit) {
+    public List<Map<String, Object>> queryForObjectList(DbKit dbKit) {
         logInfoSql(dbKit);
         List<Map<String, Object>> list = null;
         try {
@@ -140,8 +140,8 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
         return list;
     }
 
-    public List<Map<String, Object>> queryForList(String sql) {
-        return queryForList(new DbKit(sql));
+    public List<Map<String, Object>> queryForObjectList(String sql) {
+        return queryForObjectList(new DbKit(sql));
     }
 
     public Integer update(DbKit dbKit) {
@@ -238,14 +238,14 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
         return (T) queryForObject(new DbKit(sql), clazz);
     }
 
-    public <T> List<T> queryForList(DbKit dbKit, Class<T> clazz) {
+    public <T> List<T> queryForObjectList(DbKit dbKit, Class<T> clazz) {
         logInfoSql(dbKit);
         return lookupDateSourceName(dbKit.getParams()).query(dbKit.getSql(), dbKit.getParams(),
                 BeanPropertyRowMapper.newInstance(clazz));
     }
 
-    public <T> List<T> queryForList(String sql, Class<T> clazz) {
-        return queryForList(new DbKit(sql), clazz);
+    public <T> List<T> queryForObjectList(String sql, Class<T> clazz) {
+        return queryForObjectList(new DbKit(sql), clazz);
     }
 
     public Page queryForPageList(DbKit dbKit, Page page) {
@@ -316,7 +316,7 @@ public abstract class DefaultShardingDalClient implements DalClient, Initializin
     }
 
     public <T> T queryColumn(String sql, String param) {
-        List<Map<String, Object>> list = queryForList(sql);
+        List<Map<String, Object>> list = queryForObjectList(sql);
         Map<String, Object> result = null;
         if (list.size() > 0) {
             result = list.get(0);

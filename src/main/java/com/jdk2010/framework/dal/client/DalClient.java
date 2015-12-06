@@ -29,9 +29,9 @@ public interface DalClient {
 
     public <T> T findById(Object id, Class clazz);
 
-    public <T> List<T> queryForList(DbKit dbKit, Class<T> clazz);
+    public <T> List<T> queryForObjectList(DbKit dbKit, Class<T> clazz);
 
-    public List<Map<String, Object>> queryForList(DbKit dbKit);
+    public List<Map<String, Object>> queryForObjectList(DbKit dbKit);
 
     public Page queryForPageList(DbKit dbKit, Page page, Class clazz);
 
@@ -45,9 +45,9 @@ public interface DalClient {
 
     public <T> T queryForObject(String sql, Class<T> clazz);
 
-    public <T> List<T> queryForList(String sql, Class<T> clazz);
+    public <T> List<T> queryForObjectList(String sql, Class<T> clazz);
 
-    public List<Map<String, Object>> queryForList(String sql);
+    public List<Map<String, Object>> queryForObjectList(String sql);
 
     public <T> T queryColumn(String sql, String param);
 

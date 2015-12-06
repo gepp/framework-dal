@@ -56,11 +56,11 @@ public abstract class AbstractBaseServiceImpl implements IAbstractBaseService{
     }
 
     public <T> List<T> queryForList(DbKit dbKit, Class<T> clazz) {
-        return getDalClient().queryForList(dbKit, clazz);
+        return getDalClient().queryForObjectList(dbKit, clazz);
     }
 
     public List<Map<String, Object>> queryForList(DbKit dbKit) {
-        return getDalClient().queryForList(dbKit);
+        return getDalClient().queryForObjectList(dbKit);
     }
 
     public Page queryForPageList(DbKit dbKit, Page page, Class clazz) {
@@ -88,11 +88,11 @@ public abstract class AbstractBaseServiceImpl implements IAbstractBaseService{
     }
 
     public <T> List<T> queryForList(String sql, Class<T> clazz) {
-        return getDalClient().queryForList(sql, clazz);
+        return getDalClient().queryForObjectList(sql, clazz);
     }
 
     public List<Map<String, Object>> queryForList(String sql) {
-        return getDalClient().queryForList(sql);
+        return getDalClient().queryForObjectList(sql);
     }
 
     public <T> T queryColumn(String sql, String param) {
