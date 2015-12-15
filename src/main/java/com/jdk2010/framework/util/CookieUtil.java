@@ -44,6 +44,8 @@ public class CookieUtil {
                     cookie = cookies[i];
                     if (cookie.getName().equals(cookieName)) {
                         return cookie;
+                    } else {
+                        cookie = null;
                     }
                 }
             }
