@@ -78,8 +78,38 @@ public class TestDal extends TestCase {
 
     }
 
+    @Test
+    public void testReentrantLock() {
+        final BeanFactory factory = new ClassPathXmlApplicationContext("dal/applicationContext.xml");
+        final StudentDao studentDao=(StudentDao)factory.getBean("studentDao");
+        ExecutorService service = Executors.newFixedThreadPool(10);
+        for (int i = 0; i < 10; i++) {
+            service.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                       String returnstr= studentDao.add();
+                       
+                       System.out.println(Thread.currentThread().getName()+"返回:"+returnstr);
+                    } catch (InterruptedException e) {
+                        System.out.println(Thread.currentThread().getName()+"中断");
+                        //e.printStackTrace();
+                    }
+                }
+            });
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+        service.shutdown();
+
+    }
     public static void main(String[] args) {
-        new TestDal().testThreadUpdate();
+        new TestDal().testReentrantLock();
     }
 
 }

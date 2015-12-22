@@ -70,6 +70,8 @@
 		 <property name="dataSource" ref="dataSourceMysql1" />
    </bean>
 	
+	<bean id="studentDao" class="com.jdk2010.framework.test.dal.StudentDao">
+ 	</bean>
  
 	
  </beans>
