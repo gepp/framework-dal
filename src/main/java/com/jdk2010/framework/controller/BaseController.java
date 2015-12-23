@@ -6,67 +6,76 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import com.jdk2010.framework.util.JsonUtil;
 import com.jdk2010.framework.util.ModelInjector;
 import com.jdk2010.framework.util.Page;
 
-public class BaseController {
-
-    @Resource
-    private HttpServletRequest request;
-    @Resource
-    private HttpServletResponse response;
+public abstract class BaseController {
 
     public static final String REDIRECT = "redirect:";
 
     public static final String FORWARD = "forward:";
 
+    private HttpServletRequest request;
+
     public BaseController setAttr(String name, Object value) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         request.setAttribute(name, value);
         return this;
     }
 
     public BaseController removeAttr(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         request.removeAttribute(name);
         return this;
     }
 
     public String getPara(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return request.getParameter(name);
     }
 
     public String getPara(String name, String defaultValue) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String result = request.getParameter(name);
         return result != null && !"".equals(result) ? result : defaultValue;
     }
 
     public Map<String, String[]> getParaMap() {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return request.getParameterMap();
     }
 
     public Enumeration<String> getParaNames() {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return request.getParameterNames();
     }
 
     public String[] getParaValues(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return request.getParameterValues(name);
     }
 
     public <T> T getAttr(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return (T) request.getAttribute(name);
     }
 
     public String getAttrForStr(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return (String) request.getAttribute(name);
     }
 
     public Integer getAttrForInt(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return (Integer) request.getAttribute(name);
     }
 
@@ -78,23 +87,13 @@ public class BaseController {
         return Integer.parseInt(value);
     }
 
-    /**
-     * Returns the value of a request parameter and convert to Integer.
-     * 
-     * @param name a String specifying the name of the parameter
-     * @return a Integer representing the single value of the parameter
-     */
     public Integer getParaToInt(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return toInt(request.getParameter(name), null);
     }
 
-    /**
-     * Returns the value of a request parameter and convert to Integer with a default value if it is null.
-     * 
-     * @param name a String specifying the name of the parameter
-     * @return a Integer representing the single value of the parameter
-     */
     public Integer getParaToInt(String name, Integer defaultValue) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return toInt(request.getParameter(name), defaultValue);
     }
 
@@ -106,27 +105,18 @@ public class BaseController {
         return Long.parseLong(value);
     }
 
-    /**
-     * Returns the value of a request parameter and convert to Long.
-     * 
-     * @param name a String specifying the name of the parameter
-     * @return a Integer representing the single value of the parameter
-     */
     public Long getParaToLong(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return toLong(request.getParameter(name), null);
     }
 
     public Double getParaToDouble(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return Double.parseDouble(request.getParameter(name));
     }
 
-    /**
-     * Returns the value of a request parameter and convert to Long with a default value if it is null.
-     * 
-     * @param name a String specifying the name of the parameter
-     * @return a Integer representing the single value of the parameter
-     */
     public Long getParaToLong(String name, Long defaultValue) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return toLong(request.getParameter(name), defaultValue);
     }
 
@@ -141,25 +131,13 @@ public class BaseController {
         throw new RuntimeException("Can not parse the parameter \"" + value + "\" to boolean value.");
     }
 
-    /**
-     * Returns the value of a request parameter and convert to Boolean.
-     * 
-     * @param name a String specifying the name of the parameter
-     * @return true if the value of the parameter is "true" or "1", false if it is "false" or "0", null if parameter is
-     *         not exists
-     */
     public Boolean getParaToBoolean(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return toBoolean(request.getParameter(name), null);
     }
 
-    /**
-     * Returns the value of a request parameter and convert to Boolean with a default value if it is null.
-     * 
-     * @param name a String specifying the name of the parameter
-     * @return true if the value of the parameter is "true" or "1", false if it is "false" or "0", default value if it
-     *         is null
-     */
     public Boolean getParaToBoolean(String name, Boolean defaultValue) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return toBoolean(request.getParameter(name), defaultValue);
     }
 
@@ -173,44 +151,26 @@ public class BaseController {
         }
     }
 
-    /**
-     * Returns the value of a request parameter and convert to Date.
-     * 
-     * @param name a String specifying the name of the parameter
-     * @return a Date representing the single value of the parameter
-     */
     public Date getParaToDate(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return toDate(request.getParameter(name), null);
     }
 
-    /**
-     * Returns the value of a request parameter and convert to Date with a default value if it is null.
-     * 
-     * @param name a String specifying the name of the parameter
-     * @return a Date representing the single value of the parameter
-     */
     public Date getParaToDate(String name, Date defaultValue) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return toDate(request.getParameter(name), defaultValue);
     }
 
-    /**
-     * Return HttpServletRequest. Do not use HttpServletRequest Object in constructor of Controller
-     */
     public HttpServletRequest getRequest() {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return request;
-    }
-
-    /**
-     * Return HttpServletResponse. Do not use HttpServletResponse Object in constructor of Controller
-     */
-    public HttpServletResponse getResponse() {
-        return response;
     }
 
     /**
      * Return HttpSession.
      */
     public HttpSession getSession() {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return request.getSession();
     }
 
@@ -220,6 +180,7 @@ public class BaseController {
      * @param create a boolean specifying create HttpSession if it not exists
      */
     public HttpSession getSession(boolean create) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return request.getSession(create);
     }
 
@@ -229,6 +190,7 @@ public class BaseController {
      * @param key a String specifying the key of the Object stored in session
      */
     public <T> T getSessionAttr(String key) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession(false);
         return session != null ? (T) session.getAttribute(key) : null;
     }
@@ -240,6 +202,7 @@ public class BaseController {
      * @param value a Object specifying the value stored in session
      */
     public BaseController setSessionAttr(String key, Object value) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         request.getSession().setAttribute(key, value);
         return this;
     }
@@ -250,6 +213,7 @@ public class BaseController {
      * @param key a String specifying the key of the Object stored in session
      */
     public BaseController removeSessionAttr(String key) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession(false);
         if (session != null)
             session.removeAttribute(key);
@@ -287,26 +251,18 @@ public class BaseController {
         return result != null ? Integer.parseInt(result) : defaultValue;
     }
 
-    /**
-     * Get cookie value by cookie name and convert to Long.
-     */
     public Long getCookieToLong(String name) {
         String result = getCookie(name);
         return result != null ? Long.parseLong(result) : null;
     }
 
-    /**
-     * Get cookie value by cookie name and convert to Long.
-     */
     public Long getCookieToLong(String name, Long defaultValue) {
         String result = getCookie(name);
         return result != null ? Long.parseLong(result) : defaultValue;
     }
 
-    /**
-     * Get cookie object by cookie name.
-     */
     public Cookie getCookieObject(String name) {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Cookie[] cookies = request.getCookies();
         if (cookies != null)
             for (Cookie cookie : cookies)
@@ -319,43 +275,24 @@ public class BaseController {
      * Get all cookie objects.
      */
     public Cookie[] getCookieObjects() {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Cookie[] result = request.getCookies();
         return result != null ? result : new Cookie[0];
     }
 
-    /**
-     * Set Cookie to response.
-     */
-    public BaseController setCookie(Cookie cookie) {
+    public BaseController setCookie(HttpServletResponse response, Cookie cookie) {
         response.addCookie(cookie);
         return this;
     }
 
-    /**
-     * Set Cookie to response.
-     * 
-     * @param name cookie name
-     * @param value cookie value
-     * @param maxAgeInSeconds -1: clear cookie when close browser. 0: clear cookie immediately. n>0 : max age in n
-     *            seconds.
-     * @param path see Cookie.setPath(String)
-     */
-    public BaseController setCookie(String name, String value, int maxAgeInSeconds, String path) {
-        setCookie(name, value, maxAgeInSeconds, path, null);
+    public BaseController setCookie(HttpServletResponse response, String name, String value, int maxAgeInSeconds,
+            String path) {
+        setCookie(response, name, value, maxAgeInSeconds, path, null);
         return this;
     }
 
-    /**
-     * Set Cookie to response.
-     * 
-     * @param name cookie name
-     * @param value cookie value
-     * @param maxAgeInSeconds -1: clear cookie when close browser. 0: clear cookie immediately. n>0 : max age in n
-     *            seconds.
-     * @param path see Cookie.setPath(String)
-     * @param domain the domain name within which this cookie is visible; form is according to RFC 2109
-     */
-    public BaseController setCookie(String name, String value, int maxAgeInSeconds, String path, String domain) {
+    public BaseController setCookie(HttpServletResponse response, String name, String value, int maxAgeInSeconds,
+            String path, String domain) {
         Cookie cookie = new Cookie(name, value);
         if (domain != null)
             cookie.setDomain(domain);
@@ -368,49 +305,48 @@ public class BaseController {
     /**
      * Set Cookie with path = "/".
      */
-    public BaseController setCookie(String name, String value, int maxAgeInSeconds) {
-        setCookie(name, value, maxAgeInSeconds, "/", null);
+    public BaseController setCookie(HttpServletResponse response, String name, String value, int maxAgeInSeconds) {
+        setCookie(response, name, value, maxAgeInSeconds, "/", null);
         return this;
     }
 
     /**
      * Remove Cookie with path = "/".
      */
-    public BaseController removeCookie(String name) {
-        setCookie(name, null, 0, "/", null);
+    public BaseController removeCookie(HttpServletResponse response, String name) {
+        setCookie(response, name, null, 0, "/", null);
         return this;
     }
 
     /**
      * Remove Cookie.
      */
-    public BaseController removeCookie(String name, String path) {
-        setCookie(name, null, 0, path, null);
+    public BaseController removeCookie(HttpServletResponse response, String name, String path) {
+        setCookie(response, name, null, 0, path, null);
         return this;
     }
 
     /**
      * Remove Cookie.
      */
-    public BaseController removeCookie(String name, String path, String domain) {
-        setCookie(name, null, 0, path, domain);
+    public BaseController removeCookie(HttpServletResponse response, String name, String path, String domain) {
+        setCookie(response, name, null, 0, path, domain);
         return this;
     }
 
     public <T> T getModel(Class<T> modelClass) throws Exception {
+        request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return (T) ModelInjector.inject(modelClass, request, false);
     }
 
-    public void renderJson(String jsonText) throws IOException {
+    public void renderText(HttpServletResponse response, String jsonText) throws IOException {
         response.setCharacterEncoding("utf-8");
         response.getWriter().print(jsonText);
-
     }
 
-    public void renderJson(Object obj) throws IOException {
+    public void renderJson(HttpServletResponse response, Object obj) throws IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
-
         response.getWriter().print(JsonUtil.toJson(obj));
     }
 
