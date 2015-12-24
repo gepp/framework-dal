@@ -76,7 +76,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
             map = jdbcTemplate.queryForMap(dbKit.getSql(), dbKit.getParams());
         } catch (EmptyResultDataAccessException e) {
             map = null;
-            throw e;
+            
         } finally {
 
         }
@@ -99,8 +99,6 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         } catch (EmptyResultDataAccessException e) {
             t = null;
             logger.error(e.getMessage());
-            throw e;
-
         } finally {
 
         }
