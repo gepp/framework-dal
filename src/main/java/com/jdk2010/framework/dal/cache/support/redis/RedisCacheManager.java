@@ -5,10 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
-import com.jdk2010.framework.dal.exception.ExceptionUtil;
-
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+
+import com.jdk2010.framework.dal.exception.ExceptionUtil;
+import com.jdk2010.framework.util.StringUtil;
 
 public class RedisCacheManager implements InitializingBean {
 
@@ -80,7 +81,7 @@ public class RedisCacheManager implements InitializingBean {
     
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (StringUtils.isEmpty(host) || StringUtils.isEmpty(port)) {
+        if (StringUtil.isBlank(host) || StringUtil.isBlank(port)) {
             logger.error("host/port is null");
             ExceptionUtil.throwException(new RuntimeException("host/port is null"));
         }

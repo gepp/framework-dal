@@ -381,6 +381,9 @@ public class DbKit {
         // System.out.println("============");
         // setPropertieValue("name",user,"ykk");
         // System.out.println("after name:"+user.getName());
+        
+        String sql="select t.*,a.swjgbm from skq_jqxx  t left join skq_nsrxx a on t.nsrwjbm=a.nsrwjbm left join security_organization b on a.swjgbm=b.swjgbm";
+        System.out.println(DbKit.replaceFormatSqlFrom(sql));
     }
 
 }

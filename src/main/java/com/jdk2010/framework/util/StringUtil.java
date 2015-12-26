@@ -22,6 +22,10 @@ public class StringUtil {
     public static boolean isBlank(Double str) {
         return (str == null) ? true : false;
     }
+    
+    public static boolean isBlank(Integer str) {
+        return (str == null) ? true : false;
+    }
 
     public static boolean isNotBlank(String str) {
         return !isBlank(str);
