@@ -42,6 +42,14 @@ public class EhCacheCache  {
         Element element = new Element(key, value);
         ehcache.put(element);
     }
+    
+    //timeToLiveSeconds 最大存活时间
+    //timeToIdleSeconds 最大访问间隔时间
+    public void put(Object key, Object value,int timeout) throws CacheException {
+        Element element = new Element(key, value);
+        element.setTimeToLive(timeout);
+        ehcache.put(element);
+    }
 
     public void evict(Object key) throws CacheException {
         ehcache.remove(key);
