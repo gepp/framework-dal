@@ -27,7 +27,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
             if ("get".equalsIgnoreCase(requestType)) {
                 try {
                     value = new String(value.getBytes("ISO-8859-1 "), "UTF-8 ");
-                } catch (UnsupportedEncodingException e) {
+                }catch (UnsupportedEncodingException e) {
                     
                 }
             }
