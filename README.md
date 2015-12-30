@@ -6,4 +6,7 @@
 6.支持ehcache、redis 缓存<br/>
 7.新增了常用工具类 <br/>
 8.新增了基础service，service直接继承，即可自带crud<br/>
-9.新增了基础controller，controller继承，即可实现类似jfinal的一些常用封装方法<br/>
+9.新增了基础controller baseController<br/>
+10.全局异常处理HandlerExceptionResolver,使用spring的SimpleMappingExceptionResolver<br/>
+11.XSSFilter 特殊字符过滤<br/>
+
