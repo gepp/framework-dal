@@ -285,9 +285,9 @@ public class DbKit {
         sql = sql.toLowerCase();
         int startIndex = sql.indexOf(" from ");
         int lastIndex = sql.lastIndexOf(" from ");
-        if (startIndex - lastIndex != 0) {
-            return sql;
-        }
+//        if (startIndex - lastIndex != 0) {
+//            return sql;
+//        }
         int groupIndex = sql.indexOf(" group ");
         if (groupIndex > 0) {
             sql = sql.substring(0, groupIndex);
