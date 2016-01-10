@@ -108,8 +108,14 @@ public class TestDal extends TestCase {
         service.shutdown();
 
     }
+    public void testSybase(){
+        final BeanFactory factory = new ClassPathXmlApplicationContext("dal/applicationContext.xml");
+         DalClient sybaseClient =(DalClient)factory.getBean("sybaseDal");
+         sybaseClient.update("select * from SKQ_BDC");
+    }
+    
     public static void main(String[] args) {
-        new TestDal().testReentrantLock();
+        new TestDal().testSybase();
     }
 
 }

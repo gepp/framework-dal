@@ -27,6 +27,7 @@ import com.jdk2010.framework.dal.dialect.IDialect;
 import com.jdk2010.framework.dal.dialect.MssqlDialect;
 import com.jdk2010.framework.dal.dialect.MysqlDialect;
 import com.jdk2010.framework.dal.dialect.OracleDialect;
+import com.jdk2010.framework.dal.dialect.SybaseDialect;
 import com.jdk2010.framework.dal.exception.ExceptionUtil;
 import com.jdk2010.framework.dal.model.Model;
 import com.jdk2010.framework.util.DbKit;
@@ -330,6 +331,9 @@ public class DefaultDalClient implements DalClient, InitializingBean {
                 dialect = new MssqlDialect();
             } else if (productName.equals("oracle")) {
                 dialect = new OracleDialect();
+            }
+            else if (productName.equals("sybase")) {
+                dialect = new SybaseDialect();
             }
 
         } catch (SQLException e) {

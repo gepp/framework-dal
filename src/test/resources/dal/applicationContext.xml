@@ -66,11 +66,51 @@
 		<property name="dataSource" ref="dataSourceMysql1"></property>
  	</bean>
  	
+ 	
  	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		 <property name="dataSource" ref="dataSourceMysql1" />
    </bean>
 	
 	<bean id="studentDao" class="com.jdk2010.framework.test.dal.StudentDao">
+ 	</bean>
+ 	
+ 	
+ 	<bean id="dataSourceSybase" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName"><value>${sybase.driver}</value></property>
+		<property name="url"><value>${sybase.url}</value></property>
+ 		<property name="username"><value>${sybase.username}</value></property>
+		<property name="password"><value>${sybase.password}</value></property>
+		
+		<property name="proxyFilters"><list><ref bean="stat-filter" /></list></property>
+		<property name="filters" value="stat" />
+		 <!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait"><value>60000</value></property>
+		
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize"><value>5</value></property>
+		<property name="minIdle"><value>5</value></property>
+		<property name="maxActive"><value>50</value></property>
+		
+		<property name="removeAbandoned"><value>true</value></property>
+		<property name="logAbandoned" value="true" />
+		<property name="removeAbandonedTimeout"><value>1800</value></property>
+		<property name="testWhileIdle"><value>true</value></property> 
+		<!-- 打开检查,用异步线程evict进行检查 -->
+		<!-- 即在获取Connection对象时检测其可用性 true -->
+		<property name="testOnBorrow"><value>false</value></property>
+		<!-- 归还连接时执行validationQuery检测连接是否有效 -->
+		<property name="testOnReturn"><value>false</value></property>
+		<property name="validationQuery"><value>select 1 </value></property>
+		 <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+		<property name="numTestsPerEvictionRun"><value>50</value></property>
+		 <!-- 配置监控统计拦截的filters -->
+      	
+	</bean>
+ 	<bean id="sybaseDal" class="com.jdk2010.framework.dal.client.support.DefaultDalClient">
+		<property name="dataSource" ref="dataSourceSybase"></property>
  	</bean>
  
 	

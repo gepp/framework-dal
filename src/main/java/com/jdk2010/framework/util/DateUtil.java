@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import javax.rmi.CORBA.Util;
+
 public class DateUtil {
     /** 定义常量 **/
     public static final String DATE_SHORT_STR = "yyyyMM";
@@ -467,7 +469,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println();
+      
     }
 
 }
