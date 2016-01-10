@@ -1,5 +1,7 @@
 package com.jdk2010.framework.filter;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -19,7 +21,16 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     @Override
     public String getParameter(String name) {
         String value = super.getParameter(xssEncode(name));
+        String requestType = super.getMethod();
+
         if (value != null) {
+            if ("get".equalsIgnoreCase(requestType)) {
+                try {
+                    value = new String(value.getBytes("ISO-8859-1 "), "UTF-8 ");
+                }catch (UnsupportedEncodingException e) {
+                    
+                }
+            }
             value = xssEncode(value);
         }
         return value;

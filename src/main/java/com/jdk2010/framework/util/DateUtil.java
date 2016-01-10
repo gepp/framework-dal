@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import javax.rmi.CORBA.Util;
 
 public class DateUtil {
     /** 定义常量 **/
