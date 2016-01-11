@@ -1,5 +1,7 @@
 package com.jdk2010.framework.dal.cache.support.ehcache;
 
+import java.io.UnsupportedEncodingException;
+
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
@@ -49,6 +51,11 @@ public class EhCacheCacheManager implements InitializingBean {
             return;
         }
         String ehcacheXmlPath = getClass().getResource("/").getFile();
+        try {
+			ehcacheXmlPath=java.net.URLDecoder.decode(ehcacheXmlPath,"utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         cacheManager = new CacheManager(ehcacheXmlPath + cacheConfigLocation);
         if (cacheManager == null) {
             logger.info("config is error,use default cache");

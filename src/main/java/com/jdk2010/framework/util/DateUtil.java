@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+
 public class DateUtil {
     /** 定义常量 **/
     public static final String DATE_SHORT_STR = "yyyyMM";
@@ -230,20 +231,9 @@ public class DateUtil {
         return timeQuantum.longValue();
     }
 
-    public static long betweenDay(String s1, String s2) {
-        return betweenDay(s1, s2, DATE_FULL_STR);
-    }
-
-    /**
-     * 
-     * @param start
-     * @param end
-     * @param pattern
-     * @return start-end
-     */
-    public static long betweenDay(String start, String end, String pattern) {
-        Date d1 = parse(start, pattern);
-        Date d2 = parse(end, pattern);
+    public static long between(String s1, String s2) {
+        Date d1 = parse(s1, "yyyy-MM-dd HH:mm:ss");
+        Date d2 = parse(s2, "yyyy-MM-dd HH:mm:ss");
         BigDecimal timeQuantum = new BigDecimal(0);
         BigDecimal bd1 = new BigDecimal(d1.getTime());
         BigDecimal bd2 = new BigDecimal(d2.getTime());
@@ -268,13 +258,9 @@ public class DateUtil {
         return timeQuantum.longValue();
     }
 
-    public static long betweenHour(String start, String end) {
-        return betweenHour(start, end, DATE_FULL_STR);
-    }
-
-    public static long betweenHour(String start, String end, String pattern) {
-        Date d1 = parse(start, pattern);
-        Date d2 = parse(end, pattern);
+    public static long betweenHour(String s1, String s2) {
+        Date d1 = parse(s1, "yyyy-MM-dd HH:mm:ss");
+        Date d2 = parse(s2, "yyyy-MM-dd HH:mm:ss");
         BigDecimal timeQuantum = new BigDecimal(0);
         BigDecimal bd1 = new BigDecimal(d1.getTime());
         BigDecimal bd2 = new BigDecimal(d2.getTime());
@@ -299,13 +285,9 @@ public class DateUtil {
         return timeQuantum.longValue();
     }
 
-    public static long betweenMinute(String start, String end) {
-        return betweenMinute(start, end, DATE_FULL_STR);
-    }
-
-    public static long betweenMinute(String start, String end, String pattern) {
-        Date d1 = parse(start, pattern);
-        Date d2 = parse(end, pattern);
+    public static long betweenMinute(String s1, String s2) {
+        Date d1 = parse(s1, "yyyy-MM-dd HH:mm:ss");
+        Date d2 = parse(s2, "yyyy-MM-dd HH:mm:ss");
         BigDecimal timeQuantum = new BigDecimal(0);
         BigDecimal bd1 = new BigDecimal(d1.getTime());
         BigDecimal bd2 = new BigDecimal(d2.getTime());
@@ -330,19 +312,15 @@ public class DateUtil {
         return timeQuantum.longValue();
     }
 
-    public static long betweenSecond(String start, String end, String pattern) {
-        Date d1 = parse(start, pattern);
-        Date d2 = parse(end, pattern);
+    public static long betweenSecond(String s1, String s2) {
+        Date d1 = parse(s1, "yyyy-MM-dd HH:mm:ss");
+        Date d2 = parse(s2, "yyyy-MM-dd HH:mm:ss");
         BigDecimal timeQuantum = new BigDecimal(0);
         BigDecimal bd1 = new BigDecimal(d1.getTime());
         BigDecimal bd2 = new BigDecimal(d2.getTime());
         BigDecimal second = new BigDecimal(1000L);
         timeQuantum = bd1.subtract(bd2).divideToIntegralValue(second);
         return timeQuantum.longValue();
-    }
-
-    public static long betweenSecond(String start, String end) {
-        return betweenSecond(start, end, DATE_FULL_STR);
     }
 
     /**
@@ -490,7 +468,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(betweenDay("2015-10-09", "2015-10-10", "yyyy-MM-dd"));
+      
     }
 
 }
