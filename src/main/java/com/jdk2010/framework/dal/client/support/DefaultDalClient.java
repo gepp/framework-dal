@@ -336,7 +336,9 @@ public class DefaultDalClient implements DalClient, InitializingBean {
             logger.error(e.getMessage());
             ExceptionUtil.throwException(e);
         } finally {
-            connection.close();
+             if(!connection.isClosed()){
+                 connection.close();
+             }
         }
 
     }
