@@ -231,16 +231,21 @@ public class DateUtil {
         return timeQuantum.longValue();
     }
 
-    public static long between(String s1, String s2) {
-        Date d1 = parse(s1, "yyyy-MM-dd HH:mm:ss");
-        Date d2 = parse(s2, "yyyy-MM-dd HH:mm:ss");
+    public static long betweenDay(String s1, String s2) {
+        return betweenDay(s1, s2, "yyyy-MM-dd HH:mm:ss");
+      }
+
+      public static long betweenDay(String start, String end, String pattern)
+      {
+        Date d1 = parse(start, pattern);
+        Date d2 = parse(end, pattern);
         BigDecimal timeQuantum = new BigDecimal(0);
         BigDecimal bd1 = new BigDecimal(d1.getTime());
         BigDecimal bd2 = new BigDecimal(d2.getTime());
-        BigDecimal day = new BigDecimal(24L * 60 * 60 * 1000);
+        BigDecimal day = new BigDecimal(86400000L);
         timeQuantum = bd1.subtract(bd2).divideToIntegralValue(day);
         return timeQuantum.longValue();
-    }
+      }
 
     /**
      * 计算两个日期相差多少小时
