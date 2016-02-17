@@ -96,9 +96,6 @@
 		<property name="numTestsPerEvictionRun"><value>50</value></property>
 	</bean>
 	
- 	<bean id="shards" class="">
-		
-	</bean>
 	
 	
 	<bean id="mySqlDal" class="com.jdk2010.framework.dal.client.support.DefaultDalClient">

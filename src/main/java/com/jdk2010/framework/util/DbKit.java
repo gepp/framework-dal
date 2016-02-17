@@ -1,6 +1,7 @@
 package com.jdk2010.framework.util;
 
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -14,10 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.jdk2010.framework.dal.client.support.router.BaseRouterStrategy;
 import com.jdk2010.framework.dal.client.support.router.RouterManager;
 import com.jdk2010.framework.dal.exception.ExceptionUtil;
-import com.jdk2010.framework.dal.model.Model;
 import com.jdk2010.framework.dal.parse.annotation.TableField;
 import com.jdk2010.framework.dal.parse.annotation.TableRouterRule;
-import com.jdk2010.framework.test.router.mod.Student;
 
 public class DbKit {
 
@@ -148,6 +147,7 @@ public class DbKit {
         try {
             if (clazz == null || fdName == null || annotationClass == null)
                 return false;
+            
             pd = new PropertyDescriptor(fdName, clazz);
             getMethod = pd.getReadMethod();// 获得get方法
             return getMethod.isAnnotationPresent(annotationClass);
@@ -155,7 +155,27 @@ public class DbKit {
             ExceptionUtil.throwException(e);
         }
         return false;
-
+    }
+    
+    public static boolean isAnnotationField(Class clazz, String fdName, Class annotationClass) {
+        PropertyDescriptor pd = null;
+        Method getMethod = null;
+        try {
+            if (clazz == null || fdName == null || annotationClass == null)
+                return false;
+            
+            pd = new PropertyDescriptor(fdName, clazz);
+            Field field=clazz.getDeclaredField(fdName);
+            Annotation anno=field.getAnnotation(annotationClass);
+            if(anno!=null){
+                return true;
+            }else{
+                return false;
+            }
+        } catch (Exception e) {
+            ExceptionUtil.throwException(e);
+        }
+        return false;
     }
 
     public static String getBaseTableNameByClass(Class clazz) {
@@ -367,23 +387,15 @@ public class DbKit {
     }
 
     public static void main(String[] args) throws Exception {
-
-        // Map map=new HashMap<String ,Object>();
-        // map.put("id","id");
-        // map.put("username","kk");
-        // String s=warpsavesql(new SecurityMenu(),map);
-        // System.out.println(s);
-        // s=warpupdatesql(new SecurityMenu(),map);
-        // System.out.println(s);
-        // User user=new User();
-        // user.setId("123");
-        // System.out.println("before_name:"+user.getName());
-        // System.out.println("============");
-        // setPropertieValue("name",user,"ykk");
-        // System.out.println("after name:"+user.getName());
+         Map map=new HashMap<String ,Object>();
+         map.put("id","1");
+         map.put("name","gpp");
+         map.put("age", "10");
+         String s=warpsavesql(new com.jdk2010.framework.test.dal.Student(),map);
+        System.out.println(s);
         
-        String sql="select t.*,a.swjgbm from skq_jqxx  t left join skq_nsrxx a on t.nsrwjbm=a.nsrwjbm left join security_organization b on a.swjgbm=b.swjgbm";
-        System.out.println(DbKit.replaceFormatSqlFrom(sql));
+//        String sql="select t.*,a.swjgbm from skq_jqxx  t left join skq_nsrxx a on t.nsrwjbm=a.nsrwjbm left join security_organization b on a.swjgbm=b.swjgbm";
+//        System.out.println(DbKit.replaceFormatSqlFrom(sql));
     }
 
 }

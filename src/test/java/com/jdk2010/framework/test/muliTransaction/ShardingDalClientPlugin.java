@@ -1,6 +1,7 @@
 package com.jdk2010.framework.test.muliTransaction;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -62,6 +63,12 @@ public class ShardingDalClientPlugin extends DefaultShardingDalClient {
         }
         //logger.info("returnDataSourceName:"+returnDataSourceName);
         return returnDataSourceName;
+    }
+
+    @Override
+    public void batchUpdate(String sql, List<Map<String, Object>> params) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

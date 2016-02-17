@@ -16,6 +16,10 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -245,6 +249,32 @@ public class HttpUtil {
         }
     }
     public static void main(String[] args) {
+        final Semaphore semp = new Semaphore(5);
+        ExecutorService executor=Executors.newFixedThreadPool(20);
+        for(int i=0;i<20;i++){
+            final int NO = i;
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //semp.acquire();
+                        //System.out.println("Accessing: " + NO);
+                        String s=HttpUtil.post("http://localhost:8081/rateLimit/TestSemaphore","");
+                        System.out.println("thread--"+Thread.currentThread().getId()+s);
+                        //Thread.sleep((long) (Math.random() * 6000));
+                        //semp.release();
+                       // System.out.println("availablePermits-----------" + semp.availablePermits()); 
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    
+                    
+                   
+                }
+            });
+        }
+        executor.shutdown();
         
     }
 }

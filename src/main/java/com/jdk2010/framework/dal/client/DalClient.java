@@ -40,6 +40,8 @@ public interface DalClient {
     public Map<String, Object> queryForObject(String sql);
 
     public Integer update(String sql);
+    
+    public void batchUpdate(String sql,List<Map<String,Object>> params);
 
     public Page queryForPageList(String sql, Page page);
 

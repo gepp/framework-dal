@@ -16,9 +16,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import com.codahale.metrics.Timer.Context;
 import com.jdk2010.framework.dal.client.DalClient;
 import com.jdk2010.framework.dal.client.support.router.RouterManager;
 import com.jdk2010.framework.dal.client.support.router.method.DalHash;
@@ -29,6 +31,7 @@ import com.jdk2010.framework.dal.dialect.MysqlDialect;
 import com.jdk2010.framework.dal.dialect.OracleDialect;
 import com.jdk2010.framework.dal.exception.ExceptionUtil;
 import com.jdk2010.framework.dal.model.Model;
+import com.jdk2010.framework.metrics.MetricsContext;
 import com.jdk2010.framework.util.DbKit;
 import com.jdk2010.framework.util.Page;
 
@@ -153,11 +156,13 @@ public class DefaultDalClient implements DalClient, InitializingBean {
     }
 
     public Integer save(Model model) {
+        Context context = MetricsContext.start("DefaultDalClient-save");
         Map paramMap = new HashMap();
         String sql = DbKit.warpsavesql(model, paramMap);
         logger.info(sql);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, new MapSqlParameterSource(paramMap), keyHolder);
+        MetricsContext.stop(context);
         return keyHolder.getKey().intValue();
     }
 
@@ -341,6 +346,15 @@ public class DefaultDalClient implements DalClient, InitializingBean {
              }
         }
 
+    }
+
+    @Override
+    public void batchUpdate(String sql, List<Map<String, Object>> params) {
+        Map[] maps = new HashMap[params.size()];
+        for(int i=0;i<params.size();i++){
+            maps[i] = params.get(i);
+        }
+        jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(maps));
     }
 
 }
