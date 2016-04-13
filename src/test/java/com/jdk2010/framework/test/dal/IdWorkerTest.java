@@ -1,9 +1,9 @@
 package com.jdk2010.framework.test.dal;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
-import com.jdk2010.framework.dal.id.IdWorker1;
 import com.jdk2010.framework.dal.id.IdWorker;
 
 public class IdWorkerTest {
@@ -52,11 +52,16 @@ public class IdWorkerTest {
 //        thread3.start();
         try {
             Thread.sleep(1000);
+            System.out.println("Idworker2"+set.size());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Idworker2"+set.size());
         long end=System.currentTimeMillis();
         System.out.println(end-start);
+//        for(Iterator<Long> it=set.iterator();it.hasNext();)
+//        {
+//            Long  lon=it.next();
+//            System.out.println(lon);
+//        }
     }
 }
