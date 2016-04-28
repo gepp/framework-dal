@@ -140,7 +140,8 @@ public final class ConfigUtil {
 		return props.entrySet();
 	}
 	public static void main(String[] args) {
-		ConfigUtil config=new ConfigUtil("shiro.ini");
-		System.out.println(config.getString("securityManager.cacheManager"));
+//		ConfigUtil config=new ConfigUtil("shiro.ini");
+//		System.out.println(config.getString("securityManager.cacheManager"));
+		
 	}
 }

@@ -17,20 +17,10 @@
 
 package com.jdk2010.framework.metrics;
 
-import java.util.concurrent.TimeUnit;
-
-import org.slf4j.LoggerFactory;
-
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Slf4jReporter;
-import com.codahale.metrics.Slf4jReporter.LoggingLevel;
-import com.codahale.metrics.Timer.Context;
-import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 
 public final class MetricsContext {
 
-    private static final ThreadLocal<MetricsContext> CONTEXT = new ThreadLocal<MetricsContext>();
+    /*private static final ThreadLocal<MetricsContext> CONTEXT = new ThreadLocal<MetricsContext>();
 
     private final Optional<MetricRegistry> metricRegistry;
 
@@ -46,35 +36,35 @@ public final class MetricsContext {
         }
     }
 
-    /**
+    *//**
      * 注册度量上下文.
-     */
+     *//*
     public void register() {
         if (metricRegistry.isPresent() && !this.equals(CONTEXT.get())) {
             CONTEXT.set(this);
         }
     }
 
-    /**
+    *//**
      * 开始计时.
      * 
      * @param name 度量目标名称
      * 
      * @return 计时上下文
-     */
+     *//*
     public static Context start(final String... name) {
         return null == CONTEXT.get() ? null : CONTEXT.get().metricRegistry.get()
                 .timer(MetricRegistry.name(Joiner.on("-").join(name))).time();
     }
 
-    /**
+    *//**
      * 停止计时.
      * 
      * @param context 计时上下文
-     */
+     *//*
     public static void stop(final Context context) {
         if (null != context) {
             context.stop();
         }
-    }
+    }*/
 }
