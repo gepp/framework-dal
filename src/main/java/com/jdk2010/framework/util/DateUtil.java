@@ -473,7 +473,8 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-      
+        System.out.println(dateToUnixTimestamp());
+        System.out.println(unixTimestampToDate(58788747687L));
     }
 
 }

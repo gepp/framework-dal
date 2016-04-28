@@ -147,7 +147,6 @@ public class DbKit {
         try {
             if (clazz == null || fdName == null || annotationClass == null)
                 return false;
-            
             pd = new PropertyDescriptor(fdName, clazz);
             getMethod = pd.getReadMethod();// 获得get方法
             return getMethod.isAnnotationPresent(annotationClass);
@@ -391,8 +390,9 @@ public class DbKit {
          map.put("id","1");
          map.put("name","gpp");
          map.put("age", "10");
-         String s=warpsavesql(new com.jdk2010.framework.test.dal.Student(),map);
-        System.out.println(s);
+       //  String s=warpsavesql(new com.jdk2010.framework.test.dal.Student(),map);
+      //  System.out.println(s);
+        System.out.println(conversionObjectAttribute("aa_bb"));
         
 //        String sql="select t.*,a.swjgbm from skq_jqxx  t left join skq_nsrxx a on t.nsrwjbm=a.nsrwjbm left join security_organization b on a.swjgbm=b.swjgbm";
 //        System.out.println(DbKit.replaceFormatSqlFrom(sql));

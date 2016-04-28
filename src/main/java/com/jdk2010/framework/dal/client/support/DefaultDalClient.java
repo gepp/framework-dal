@@ -71,6 +71,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         }
     }
 
+    @Override
     public Map<String, Object> queryForObject(DbKit dbKit) {
         Map<String, Object> map = null;
         try {
@@ -78,17 +79,19 @@ public class DefaultDalClient implements DalClient, InitializingBean {
             map = jdbcTemplate.queryForMap(dbKit.getSql(), dbKit.getParams());
         } catch (EmptyResultDataAccessException e) {
             map = null;
-            
+
         } finally {
 
         }
         return map;
     }
 
+    @Override
     public Map<String, Object> queryForObject(String sql) {
         return queryForObject(new DbKit(sql));
     }
 
+    @Override
     public <T> T queryForObject(DbKit dbKit, Class<T> clazz) {
         logInfoSql(dbKit);
         List<T> list = null;
@@ -107,10 +110,12 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return t;
     }
 
+    @Override
     public <T> T queryForObject(String sql, Class<T> clazz) {
         return queryForObject(new DbKit(sql), clazz);
     }
 
+    @Override
     public List<Map<String, Object>> queryForObjectList(DbKit dbKit) {
         logInfoSql(dbKit);
         List<Map<String, Object>> list = null;
@@ -123,10 +128,12 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return list;
     }
 
+    @Override
     public List<Map<String, Object>> queryForObjectList(String sql) {
         return queryForObjectList(new DbKit(sql));
     }
 
+    @Override
     public Integer update(DbKit dbKit) {
         logInfoSql(dbKit);
         Integer returnInteger = 0;
@@ -139,10 +146,13 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return returnInteger;
     }
 
+    @Override
     public Integer update(String sql) {
         return update(new DbKit(sql));
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
     public Integer update(Model model) {
         Map paramMap = new HashMap();
         String sql = DbKit.warpupdatesql(model, paramMap);
@@ -154,6 +164,8 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
     public Integer save(Model model) {
         //Context context = MetricsContext.start("DefaultDalClient-save");
         Map paramMap = new HashMap();
@@ -173,6 +185,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return keyHolder.getKey().intValue();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Integer save(DbKit dbKit) {
         Map paramMap = dbKit.getParams();
@@ -182,6 +195,8 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return keyHolder.getKey().intValue();
     }
 
+    @SuppressWarnings({ "rawtypes"})
+    @Override
     public Integer deleteByID(Object id, Class clazz) {
         String tableName = DbKit.getTableName(clazz);
         String sql = "delete from " + tableName + " where id='" + id + "'";
@@ -189,6 +204,8 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return update(new DbKit(sql));
     }
 
+    @SuppressWarnings({ "rawtypes" })
+    @Override
     public Integer deleteByIDS(Object ids, Class clazz) {
         Integer rowCount = 0;
         if (ids == null) {
@@ -210,21 +227,26 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return rowCount;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
     public <T> T findById(Object id, Class clazz) {
         String tableName = DbKit.getTableName(clazz);
         String sql = "select * from " + tableName + " where id='" + id + "'";
         return (T) queryForObject(new DbKit(sql), clazz);
     }
 
+    @Override
     public <T> List<T> queryForObjectList(DbKit dbKit, Class<T> clazz) {
         logInfoSql(dbKit);
         return jdbcTemplate.query(dbKit.getSql(), dbKit.getParams(), BeanPropertyRowMapper.newInstance(clazz));
     }
 
+    @Override
     public <T> List<T> queryForObjectList(String sql, Class<T> clazz) {
         return queryForObjectList(new DbKit(sql), clazz);
     }
 
+    @Override
     public Page queryForPageList(DbKit dbKit, Page page) {
         Page pageResult = warpPageSql(page, dbKit);
         String pageSql = pageResult.getSql();
@@ -235,14 +257,19 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return page;
     }
 
+    @Override
     public Page queryForPageList(String sql, Page page) {
         return queryForPageList(new DbKit(sql), page);
     }
 
+    @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Page queryForPageList(String sql, Page page, Class clazz) {
         return queryForPageList(new DbKit(sql), page, clazz);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
     public Page queryForPageList(DbKit dbKit, Page page, Class clazz) {
         Page pageResult = warpPageSql(page, dbKit);
         String pageSql = pageResult.getSql();
@@ -293,6 +320,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return page;
     }
 
+    @Override
     public <T> T queryColumn(String sql, String param) {
         List<Map<String, Object>> list = queryForObjectList(sql);
         Map<String, Object> result = null;
@@ -340,9 +368,9 @@ public class DefaultDalClient implements DalClient, InitializingBean {
             logger.error(e.getMessage());
             ExceptionUtil.throwException(e);
         } finally {
-             if(!connection.isClosed()){
-                 connection.close();
-             }
+            if (!connection.isClosed()) {
+                connection.close();
+            }
         }
 
     }
@@ -350,11 +378,10 @@ public class DefaultDalClient implements DalClient, InitializingBean {
     @Override
     public void batchUpdate(String sql, List<Map<String, Object>> params) {
         Map[] maps = new HashMap[params.size()];
-        for(int i=0;i<params.size();i++){
+        for (int i = 0; i < params.size(); i++) {
             maps[i] = params.get(i);
         }
         jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(maps));
     }
 
 }
- 
