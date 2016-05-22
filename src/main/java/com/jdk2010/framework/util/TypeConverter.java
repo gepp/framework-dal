@@ -24,11 +24,12 @@ final class TypeConverter {
     public static final Object convert(Class<?> clazz, String s) throws ParseException {
         // mysql type: varchar, char, enum, set, text, tinytext, mediumtext, longtext
         if (clazz == String.class) {
-            return ("".equals(s) ? null : s); // 用户在表单域中没有输入内容时将提交过来 "", 因为没有输入,所以要转成 null.
+//            return ("".equals(s) ? null : s); // 用户在表单域中没有输入内容时将提交过来 "", 因为没有输入,所以要转成 null.
+            return s;
         }
         s = s.trim();
         if ("".equals(s)) { // 前面的 String跳过以后,所有的空字符串全都转成 null, 这是合理的
-            return null;
+            return "";
         }
         // 以上两种情况无需转换,直接返回, 注意, 本方法不接受null为 s 参数(经测试永远不可能传来null, 因为无输入传来的也是"")
 
