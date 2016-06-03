@@ -99,7 +99,7 @@
 	
 	
 	<bean id="mySqlDal" class="com.jdk2010.framework.dal.client.support.DefaultDalClient">
-		<property name="dataSource" ref="dataSourceMysql1"></property>
+		<property name="dataSource" ref="dataSourceMysql2"></property>
  	</bean>
 	
 	<bean id="transactionManager"
