@@ -363,7 +363,33 @@ public class DateUtil {
 
         return formatDateTime(c.getTime(), DATE_FULL_STR);
     }
+    
+    
+     
 
+    /**
+     * 获取当月最后一天
+     * @return
+     */                  
+    public static String getFirstDayOfCurrentMouth() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return formatDateTime(c.getTime(), DATE_FULL_STR);
+    }
+
+    
+    /**
+     * 获取当月第一天
+     * 
+     * @return
+     */
+    public static String getLastDayOfCurrentMouth() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_MONTH, 1);
+
+        return formatDateTime(c.getTime(), DATE_FULL_STR);
+    }
+    
     /**
      * 获取上月第一天
      * 
@@ -461,6 +487,7 @@ public class DateUtil {
         }
         return shortstring;
     }
+    
 
     public static String getWeekOfDate(Date dt) {
         String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
@@ -473,8 +500,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(dateToUnixTimestamp());
-        System.out.println(unixTimestampToDate(58788747687L));
+        System.out.println(getFirstDayOfCurrentMonth());
     }
 
 }
