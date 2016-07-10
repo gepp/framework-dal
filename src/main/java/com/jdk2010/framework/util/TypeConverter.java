@@ -26,19 +26,21 @@ final class TypeConverter {
         if (clazz == String.class) {
             return ("".equals(s) ? null : s);   // 用户在表单域中没有输入内容时将提交过来 "", 因为没有输入,所以要转成 null.
         }
-        s = s.trim();
-        if ("".equals(s)) { // 前面的 String跳过以后,所有的空字符串全都转成 null, 这是合理的
-            return null;
-        }
         // 以上两种情况无需转换,直接返回, 注意, 本方法不接受null为 s 参数(经测试永远不可能传来null, 因为无输入传来的也是"")
 
         Object result = null;
         // mysql type: int, integer, tinyint(n) n > 1, smallint, mediumint
         if (clazz == Integer.class || clazz == int.class) {
+            if ("".equals(s)) { // 前面的 String跳过以后,所有的空字符串全都转成 null, 这是合理的
+                s="0";
+            }
             result = Integer.parseInt(s);
         }
         // mysql type: bigint
         else if (clazz == Long.class || clazz == long.class) {
+            if ("".equals(s)) { // 前面的 String跳过以后,所有的空字符串全都转成 null, 这是合理的
+                s="0";
+            }
             result = Long.parseLong(s);
         }
         // 经测试java.util.Data类型不会返回, java.sql.Date, java.sql.Time,java.sql.Timestamp 全部直接继承自 java.util.Data, 所以
@@ -73,10 +75,16 @@ final class TypeConverter {
         }
         // mysql type: real, double
         else if (clazz == Double.class) {
+            if ("".equals(s)) { // 前面的 String跳过以后,所有的空字符串全都转成 null, 这是合理的
+                s="0";
+            }
             result = Double.parseDouble(s);
         }
         // mysql type: float
         else if (clazz == Float.class) {
+            if ("".equals(s)) { // 前面的 String跳过以后,所有的空字符串全都转成 null, 这是合理的
+                s="0";
+            }
             result = Float.parseFloat(s);
         }
         // mysql type: bit, tinyint(1)
@@ -85,10 +93,16 @@ final class TypeConverter {
         }
         // mysql type: decimal, numeric
         else if (clazz == java.math.BigDecimal.class) {
+            if ("".equals(s)) { // 前面的 String跳过以后,所有的空字符串全都转成 null, 这是合理的
+                s="0";
+            }
             result = new java.math.BigDecimal(s);
         }
         // mysql type: unsigned bigint
         else if (clazz == java.math.BigInteger.class) {
+            if ("".equals(s)) { // 前面的 String跳过以后,所有的空字符串全都转成 null, 这是合理的
+                s="0";
+            }
             result = new java.math.BigInteger(s);
         }
         // mysql type: binary, varbinary, tinyblob, blob, mediumblob, longblob. I have not finished the test.
