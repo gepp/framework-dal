@@ -337,6 +337,8 @@ public class DefaultDalClient implements DalClient, InitializingBean {
             } catch (Exception e) {
                 logger.error(e.getMessage());
                 temp = null;
+                throw new RuntimeException(e);
+                
             } finally {
 
             }
