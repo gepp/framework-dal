@@ -36,23 +36,23 @@ public class TestShardingDal extends TestCase {
         BeanFactory factory = new ClassPathXmlApplicationContext("shard/applicationContext_shard.xml");
         DalClient dalClient = factory.getBean(DalClient.class);
         Student student = new Student();
+        student.setId(86);
         student.setName("111ykk");
         student.setAge("90");
-        student.setId(86);
         int result = dalClient.save(student);
         logger.info("返回id：" + result + "");
-
         Student student1 = new Student();
+        
+        student1.setId(87);
         student1.setName("111ykk");
         student1.setAge("90");
-        student1.setId(87);
         result = dalClient.save(student1);
         logger.info("返回id：" + result + "");
-
         Student student2 = new Student();
+        student2.setId(88);
         student2.setName("111ykk");
         student2.setAge("90");
-        student2.setId(88);
+       
         result = dalClient.save(student2);
         logger.info("返回id：" + result + "");
     }

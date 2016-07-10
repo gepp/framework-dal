@@ -64,17 +64,14 @@
 	
 	<bean id="mySqlDal" class="com.jdk2010.framework.dal.client.support.DefaultDalClient">
 		<property name="dataSource" ref="dataSourceMysql1"></property>
+		<property name="showSql" value="true"></property>
  	</bean>
  	
  	
  	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		 <property name="dataSource" ref="dataSourceMysql1" />
    </bean>
-	
-	<bean id="studentDao" class="com.jdk2010.framework.test.dal.StudentDao">
- 	</bean>
- 	
- 	
+	 
  	<bean id="dataSourceSybase" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
 		<property name="driverClassName"><value>${sybase.driver}</value></property>
 		<property name="url"><value>${sybase.url}</value></property>
@@ -109,9 +106,9 @@
 		 <!-- 配置监控统计拦截的filters -->
       	
 	</bean>
- 	<bean id="sybaseDal" class="com.jdk2010.framework.dal.client.support.DefaultDalClient">
+ 	<!-- <bean id="sybaseDal" class="com.jdk2010.framework.dal.client.support.DefaultDalClient">
 		<property name="dataSource" ref="dataSourceSybase"></property>
  	</bean>
- 
+  -->
 	
  </beans>
