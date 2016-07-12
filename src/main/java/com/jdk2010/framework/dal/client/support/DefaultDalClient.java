@@ -20,7 +20,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import com.codahale.metrics.Timer.Context;
 import com.jdk2010.framework.dal.client.DalClient;
 import com.jdk2010.framework.dal.client.support.router.RouterManager;
 import com.jdk2010.framework.dal.client.support.router.method.DalHash;
@@ -168,13 +167,13 @@ public class DefaultDalClient implements DalClient, InitializingBean {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Integer save(Model model) {
-        Context context = MetricsContext.start("DefaultDalClient-save");
+        //Context context = MetricsContext.start("DefaultDalClient-save");
         Map paramMap = new HashMap();
         String sql = DbKit.warpsavesql(model, paramMap);
         logger.info(sql);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, new MapSqlParameterSource(paramMap), keyHolder);
-        MetricsContext.stop(context);
+//        MetricsContext.stop(context);
         return keyHolder.getKey().intValue();
     }
 
@@ -338,6 +337,8 @@ public class DefaultDalClient implements DalClient, InitializingBean {
             } catch (Exception e) {
                 logger.error(e.getMessage());
                 temp = null;
+                throw new RuntimeException(e);
+                
             } finally {
 
             }

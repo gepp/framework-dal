@@ -234,11 +234,11 @@ public class DbKit {
                 }
                 continue;
             }
-            if (DbKit.getPropertieValue(fdName, entity) != null) {
+          //  if (DbKit.getPropertieValue(fdName, entity) != null) { //2016-07-10 全部更新字段
                 paramMap.put(conversionObjectAttribute(fdName), DbKit.getPropertieValue(fdName, entity));
                 sql.append(conversionObjectAttribute(fdName)).append("=:").append(conversionObjectAttribute(fdName))
                         .append(",");
-            }
+          //  }
         }
         String str = sql.toString();
         if (str.endsWith(",")) {
@@ -301,7 +301,7 @@ public class DbKit {
         if (sql == null || sql.trim().length() == 0) {
             return sql;
         }
-        sql = sql.toLowerCase();
+        //sql = sql.toLowerCase();
         int startIndex = sql.indexOf(" from ");
         int lastIndex = sql.lastIndexOf(" from ");
 //        if (startIndex - lastIndex != 0) {

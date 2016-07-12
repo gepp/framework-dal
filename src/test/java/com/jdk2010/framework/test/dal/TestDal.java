@@ -156,7 +156,7 @@ public class TestDal extends TestCase {
 
                         String age = dalClient.queryColumn("select age from student where id=1 for update", "age");
                         Integer ageInt = Integer.parseInt(age) + 1;
-                        logger.info(ageInt + "");
+                        System.out.println("ageInt:"+ageInt);
                         dalClient.update("update student set age=" + ageInt + " where id=1");
                         manager.commit(status);
                     } catch (Exception e) {
