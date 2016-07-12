@@ -16,9 +16,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -29,12 +26,15 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSONArray;
+
 /**
  * HttpKit
  */
 public class HttpUtil {
 
     private HttpUtil() {
+
     }
 
     /**
@@ -81,6 +81,7 @@ public class HttpUtil {
 
     private static HttpURLConnection getHttpConnection(String url, String method, Map<String, String> headers)
             throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException {
+        // Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.19.110.31", 8080));
         URL _url = new URL(url);
         HttpURLConnection conn = (HttpURLConnection) _url.openConnection();
         if (conn instanceof HttpsURLConnection) {
@@ -92,8 +93,8 @@ public class HttpUtil {
         conn.setDoOutput(true);
         conn.setDoInput(true);
 
-        conn.setConnectTimeout(19000);
-        conn.setReadTimeout(19000);
+        conn.setConnectTimeout(5000);
+        conn.setReadTimeout(5000);
 
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         conn.setRequestProperty("User-Agent",
@@ -248,33 +249,44 @@ public class HttpUtil {
                 }
         }
     }
-    public static void main(String[] args) {
-        final Semaphore semp = new Semaphore(5);
-        ExecutorService executor=Executors.newFixedThreadPool(20);
-        for(int i=0;i<20;i++){
-            final int NO = i;
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        //semp.acquire();
-                        //System.out.println("Accessing: " + NO);
-                        String s=HttpUtil.post("http://localhost:8081/rateLimit/TestSemaphore","");
-                        System.out.println("thread--"+Thread.currentThread().getId()+s);
-                        //Thread.sleep((long) (Math.random() * 6000));
-                        //semp.release();
-                       // System.out.println("availablePermits-----------" + semp.availablePermits()); 
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    
-                    
-                   
-                }
-            });
+
+    public static void getPrice(String id) {
+        String before = "";
+        if (id.startsWith("6")) {
+            before = "sh";
+        } else {
+            before = "sz";
         }
-        executor.shutdown();
-        
+        String url = "http://web.juhe.cn:8080/finance/stock/hs?gid=" + before + id
+                + "&type=&key=3c2335d5f9bb71285367d67796af95de";
+        String returnStr = HttpUtil.get(url);
+        System.out.println(returnStr);
+        Map<String, Object> map = JsonUtil.jsonToMap(returnStr);
+        JSONArray array = (JSONArray) map.get("result");
+        // System.out.println(array);
+        Map<String, Object> map1 = (Map<String, Object>) array.get(0);
+        Map<String, Object> map2 = (Map<String, Object>) map1.get("data");
+        System.out.print(map2.get("name") + "   ");
+        System.out.print(map2.get("nowPri") + " ");
+        System.out.print(map2.get("increPer") + "% ");
+        System.out.print(map2.get("time") + " ");
+        System.out.println();
+
     }
+
+    public static void main(String[] args) {
+        // getPrice("002407");
+        // getPrice("150201");
+        // getPrice("000930");
+        // getPrice("002059");
+        // getPrice("000948");
+        getPrice("002702");
+        getPrice("002081");
+        // getPrice("000768");
+        getPrice("002407");
+        getPrice("000555");
+        // getPrice("002180");
+        // System.out.println(HttpUtil.get("http://www2.zjjw.com/"));
+    }
+
 }
