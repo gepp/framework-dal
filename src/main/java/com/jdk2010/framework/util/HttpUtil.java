@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
@@ -28,246 +26,267 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSONArray;
+
 /**
  * HttpKit
  */
 public class HttpUtil {
 
-	private HttpUtil() {
-	}
+    private HttpUtil() {
 
-	/**
-	 * https 域名校验
-	 */
-	private class TrustAnyHostnameVerifier implements HostnameVerifier {
-		public boolean verify(String hostname, SSLSession session) {
-			return true;
-		}
-	}
+    }
 
-	/**
-	 * https 证书管理
-	 */
-	private class TrustAnyTrustManager implements X509TrustManager {
-		public X509Certificate[] getAcceptedIssuers() {
-			return null;
-		}
+    /**
+     * https 域名校验
+     */
+    private class TrustAnyHostnameVerifier implements HostnameVerifier {
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
+    }
 
-		public void checkClientTrusted(X509Certificate[] chain, String authType)
-				throws CertificateException {
-		}
+    /**
+     * https 证书管理
+     */
+    private class TrustAnyTrustManager implements X509TrustManager {
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
 
-		public void checkServerTrusted(X509Certificate[] chain, String authType)
-				throws CertificateException {
-		}
-	}
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
 
-	private static final String GET = "GET";
-	private static final String POST = "POST";
-	private static final String CHARSET = "UTF-8";
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+    }
 
-	private static final SSLSocketFactory sslSocketFactory = initSSLSocketFactory();
-	private static final TrustAnyHostnameVerifier trustAnyHostnameVerifier = new HttpUtil().new TrustAnyHostnameVerifier();
+    private static final String GET = "GET";
+    private static final String POST = "POST";
+    private static final String CHARSET = "UTF-8";
 
-	private static SSLSocketFactory initSSLSocketFactory() {
-		try {
-			TrustManager[] tm = { new HttpUtil().new TrustAnyTrustManager() };
-			SSLContext sslContext = SSLContext.getInstance("TLS", "SunJSSE");
-			sslContext.init(null, tm, new java.security.SecureRandom());
-			return sslContext.getSocketFactory();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private static final SSLSocketFactory sslSocketFactory = initSSLSocketFactory();
+    private static final TrustAnyHostnameVerifier trustAnyHostnameVerifier = new HttpUtil().new TrustAnyHostnameVerifier();
 
-	private static HttpURLConnection getHttpConnection(String url,
-			String method, Map<String, String> headers) throws IOException,
-			NoSuchAlgorithmException, NoSuchProviderException,
-			KeyManagementException {
-		URL _url = new URL(url);
-//		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
-//				"127.0.0.1", 16823));
-		// HttpURLConnection conn = (HttpURLConnection)
-		// _url.openConnection(proxy);
-		HttpURLConnection conn = (HttpURLConnection) _url.openConnection();
-		if (conn instanceof HttpsURLConnection) {
-			((HttpsURLConnection) conn).setSSLSocketFactory(sslSocketFactory);
-			((HttpsURLConnection) conn)
-					.setHostnameVerifier(trustAnyHostnameVerifier);
-		}
+    private static SSLSocketFactory initSSLSocketFactory() {
+        try {
+            TrustManager[] tm = { new HttpUtil().new TrustAnyTrustManager() };
+            SSLContext sslContext = SSLContext.getInstance("TLS", "SunJSSE");
+            sslContext.init(null, tm, new java.security.SecureRandom());
+            return sslContext.getSocketFactory();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-		conn.setRequestMethod(method);
-		conn.setDoOutput(true);
-		conn.setDoInput(true);
+    private static HttpURLConnection getHttpConnection(String url, String method, Map<String, String> headers)
+            throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException {
+        // Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.19.110.31", 8080));
+        URL _url = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) _url.openConnection();
+        if (conn instanceof HttpsURLConnection) {
+            ((HttpsURLConnection) conn).setSSLSocketFactory(sslSocketFactory);
+            ((HttpsURLConnection) conn).setHostnameVerifier(trustAnyHostnameVerifier);
+        }
 
-		conn.setConnectTimeout(3000);
-		conn.setReadTimeout(3000);
+        conn.setRequestMethod(method);
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
 
-		conn.setRequestProperty("Content-Type",
-				"application/x-www-form-urlencoded");
-		conn.setRequestProperty(
-				"User-Agent",
-				"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36");
+        conn.setConnectTimeout(5000);
+        conn.setReadTimeout(5000);
 
-		if (headers != null && !headers.isEmpty())
-			for (Entry<String, String> entry : headers.entrySet())
-				conn.setRequestProperty(entry.getKey(), entry.getValue());
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestProperty("User-Agent",
+                "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36");
 
-		return conn;
-	}
+        if (headers != null && !headers.isEmpty())
+            for (Entry<String, String> entry : headers.entrySet())
+                conn.setRequestProperty(entry.getKey(), entry.getValue());
 
-	/**
-	 * Send GET request
-	 */
-	public static String get(String url, Map<String, String> queryParas,
-			Map<String, String> headers) {
-		HttpURLConnection conn = null;
-		try {
-			conn = getHttpConnection(buildUrlWithQueryString(url, queryParas),
-					GET, headers);
-			conn.connect();
-			return readResponseString(conn);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (conn != null) {
-				conn.disconnect();
-			}
-		}
-	}
+        return conn;
+    }
 
-	public static String get(String url, Map<String, String> queryParas) {
-		return get(url, queryParas, null);
-	}
+    /**
+     * Send GET request
+     */
+    public static String get(String url, Map<String, String> queryParas, Map<String, String> headers) {
+        HttpURLConnection conn = null;
+        try {
+            conn = getHttpConnection(buildUrlWithQueryString(url, queryParas), GET, headers);
+            conn.connect();
+            return readResponseString(conn);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+    }
 
-	public static String get(String url) {
-		return get(url, null, null);
-	}
+    public static String get(String url, Map<String, String> queryParas) {
+        return get(url, queryParas, null);
+    }
 
-	/**
-	 * Send POST request
-	 */
-	public static String post(String url, Map<String, String> queryParas,
-			String data, Map<String, String> headers) {
-		HttpURLConnection conn = null;
-		try {
-			conn = getHttpConnection(buildUrlWithQueryString(url, queryParas),
-					POST, headers);
-			conn.connect();
+    public static String get(String url) {
+        return get(url, null, null);
+    }
 
-			OutputStream out = conn.getOutputStream();
-			out.write(data.getBytes(CHARSET));
-			out.flush();
-			out.close();
+    /**
+     * Send POST request
+     */
+    public static String post(String url, Map<String, String> queryParas, String data, Map<String, String> headers) {
+        HttpURLConnection conn = null;
+        try {
+            conn = getHttpConnection(buildUrlWithQueryString(url, queryParas), POST, headers);
+            conn.connect();
 
-			return readResponseString(conn);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (conn != null) {
-				conn.disconnect();
-			}
-		}
-	}
+            OutputStream out = conn.getOutputStream();
+            out.write(data.getBytes(CHARSET));
+            out.flush();
+            out.close();
 
-	public static String post(String url, Map<String, String> queryParas,
-			String data) {
-		return post(url, queryParas, data, null);
-	}
+            return readResponseString(conn);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+    }
 
-	public static String post(String url, String data,
-			Map<String, String> headers) {
-		return post(url, null, data, headers);
-	}
+    public static String post(String url, Map<String, String> queryParas, String data) {
+        return post(url, queryParas, data, null);
+    }
 
-	public static String post(String url, String data) {
-		return post(url, null, data, null);
-	}
+    public static String post(String url, String data, Map<String, String> headers) {
+        return post(url, null, data, headers);
+    }
 
-	private static String readResponseString(HttpURLConnection conn) {
-		StringBuilder sb = new StringBuilder();
-		InputStream inputStream = null;
-		try {
-			inputStream = conn.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					inputStream, CHARSET));
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line).append("\n");
-			}
-			return sb.toString();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+    public static String post(String url, String data) {
+        return post(url, null, data, null);
+    }
 
-	/**
-	 * Build queryString of the url
-	 */
-	private static String buildUrlWithQueryString(String url,
-			Map<String, String> queryParas) {
-		if (queryParas == null || queryParas.isEmpty())
-			return url;
+    private static String readResponseString(HttpURLConnection conn) {
+        StringBuilder sb = new StringBuilder();
+        InputStream inputStream = null;
+        try {
+            inputStream = conn.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, CHARSET));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
-		StringBuilder sb = new StringBuilder(url);
-		boolean isFirst;
-		if (url.indexOf("?") == -1) {
-			isFirst = true;
-			sb.append("?");
-		} else {
-			isFirst = false;
-		}
+    /**
+     * Build queryString of the url
+     */
+    private static String buildUrlWithQueryString(String url, Map<String, String> queryParas) {
+        if (queryParas == null || queryParas.isEmpty())
+            return url;
 
-		for (Entry<String, String> entry : queryParas.entrySet()) {
-			if (isFirst)
-				isFirst = false;
-			else
-				sb.append("&");
+        StringBuilder sb = new StringBuilder(url);
+        boolean isFirst;
+        if (url.indexOf("?") == -1) {
+            isFirst = true;
+            sb.append("?");
+        } else {
+            isFirst = false;
+        }
 
-			String key = entry.getKey();
-			String value = entry.getValue();
-			if (StringUtil.isNotBlank(value))
-				try {
-					value = URLEncoder.encode(value, CHARSET);
-				} catch (UnsupportedEncodingException e) {
-					throw new RuntimeException(e);
-				}
-			sb.append(key).append("=").append(value);
-		}
-		return sb.toString();
-	}
+        for (Entry<String, String> entry : queryParas.entrySet()) {
+            if (isFirst)
+                isFirst = false;
+            else
+                sb.append("&");
 
-	public static String readIncommingRequestData(HttpServletRequest request) {
-		BufferedReader br = null;
-		try {
-			StringBuilder result = new StringBuilder();
-			br = request.getReader();
-			for (String line = null; (line = br.readLine()) != null;) {
-				result.append(line).append("\n");
-			}
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (StringUtil.isNotBlank(value))
+                try {
+                    value = URLEncoder.encode(value, CHARSET);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+            sb.append(key).append("=").append(value);
+        }
+        return sb.toString();
+    }
 
-			return result.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (br != null)
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-	}
+    public static String readIncommingRequestData(HttpServletRequest request) {
+        BufferedReader br = null;
+        try {
+            StringBuilder result = new StringBuilder();
+            br = request.getReader();
+            for (String line = null; (line = br.readLine()) != null;) {
+                result.append(line).append("\n");
+            }
 
-	public static void main(String[] args) throws IOException {
-		System.out.println(HttpUtil.get("http://www.baidu.com/"));
-	}
+            return result.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (br != null)
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
+    }
+
+    public static void getPrice(String id) {
+        String before = "";
+        if (id.startsWith("6")) {
+            before = "sh";
+        } else {
+            before = "sz";
+        }
+        String url = "http://web.juhe.cn:8080/finance/stock/hs?gid=" + before + id
+                + "&type=&key=3c2335d5f9bb71285367d67796af95de";
+        String returnStr = HttpUtil.get(url);
+        System.out.println(returnStr);
+        Map<String, Object> map = JsonUtil.jsonToMap(returnStr);
+        JSONArray array = (JSONArray) map.get("result");
+        // System.out.println(array);
+        Map<String, Object> map1 = (Map<String, Object>) array.get(0);
+        Map<String, Object> map2 = (Map<String, Object>) map1.get("data");
+        System.out.print(map2.get("name") + "   ");
+        System.out.print(map2.get("nowPri") + " ");
+        System.out.print(map2.get("increPer") + "% ");
+        System.out.print(map2.get("time") + " ");
+        System.out.println();
+
+    }
+
+    public static void main(String[] args) {
+        // getPrice("002407");
+        // getPrice("150201");
+        // getPrice("000930");
+        // getPrice("002059");
+        // getPrice("000948");
+        getPrice("002702");
+        getPrice("002081");
+        // getPrice("000768");
+        getPrice("002407");
+        getPrice("000555");
+        // getPrice("002180");
+        // System.out.println(HttpUtil.get("http://www2.zjjw.com/"));
+    }
+
 }
