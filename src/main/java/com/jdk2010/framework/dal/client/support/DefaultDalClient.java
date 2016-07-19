@@ -74,14 +74,15 @@ public class DefaultDalClient implements DalClient, InitializingBean {
     @Override
     public Map<String, Object> queryForObject(DbKit dbKit) {
         Map<String, Object> map = null;
+        List<Map<String, Object>> list = null;
         try {
-            logInfoSql(dbKit);
-            map = jdbcTemplate.queryForMap(dbKit.getSql(), dbKit.getParams());
-        } catch (EmptyResultDataAccessException e) {
-            map = null;
-
-        } finally {
-
+            list = jdbcTemplate.queryForList(dbKit.getSql(), dbKit.getParams());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            ExceptionUtil.throwException(e);
+        }
+        if (list.size() > 0) {
+            map = list.get(0);
         }
         return map;
     }
@@ -167,13 +168,13 @@ public class DefaultDalClient implements DalClient, InitializingBean {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Integer save(Model model) {
-        //Context context = MetricsContext.start("DefaultDalClient-save");
+        // Context context = MetricsContext.start("DefaultDalClient-save");
         Map paramMap = new HashMap();
         String sql = DbKit.warpsavesql(model, paramMap);
         logger.info(sql);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, new MapSqlParameterSource(paramMap), keyHolder);
-//        MetricsContext.stop(context);
+        // MetricsContext.stop(context);
         return keyHolder.getKey().intValue();
     }
 
@@ -195,7 +196,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
         return keyHolder.getKey().intValue();
     }
 
-    @SuppressWarnings({ "rawtypes"})
+    @SuppressWarnings({ "rawtypes" })
     @Override
     public Integer deleteByID(Object id, Class clazz) {
         String tableName = DbKit.getTableName(clazz);
@@ -338,7 +339,7 @@ public class DefaultDalClient implements DalClient, InitializingBean {
                 logger.error(e.getMessage());
                 temp = null;
                 throw new RuntimeException(e);
-                
+
             } finally {
 
             }
