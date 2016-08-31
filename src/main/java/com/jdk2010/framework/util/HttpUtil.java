@@ -250,29 +250,7 @@ public class HttpUtil {
         }
     }
 
-    public static void getPrice(String id) {
-        String before = "";
-        if (id.startsWith("6")) {
-            before = "sh";
-        } else {
-            before = "sz";
-        }
-        String url = "http://web.juhe.cn:8080/finance/stock/hs?gid=" + before + id
-                + "&type=&key=3c2335d5f9bb71285367d67796af95de";
-        String returnStr = HttpUtil.get(url);
-        System.out.println(returnStr);
-        Map<String, Object> map = JsonUtil.jsonToMap(returnStr);
-        JSONArray array = (JSONArray) map.get("result");
-        // System.out.println(array);
-        Map<String, Object> map1 = (Map<String, Object>) array.get(0);
-        Map<String, Object> map2 = (Map<String, Object>) map1.get("data");
-        System.out.print(map2.get("name") + "   ");
-        System.out.print(map2.get("nowPri") + " ");
-        System.out.print(map2.get("increPer") + "% ");
-        System.out.print(map2.get("time") + " ");
-        System.out.println();
-
-    }
+    
 
     public static void main(String[] args) {
          
