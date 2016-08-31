@@ -275,18 +275,7 @@ public class HttpUtil {
     }
 
     public static void main(String[] args) {
-        // getPrice("002407");
-        // getPrice("150201");
-        // getPrice("000930");
-        // getPrice("002059");
-        // getPrice("000948");
-        getPrice("002702");
-        getPrice("002081");
-        // getPrice("000768");
-        getPrice("002407");
-        getPrice("000555");
-        // getPrice("002180");
-        // System.out.println(HttpUtil.get("http://www2.zjjw.com/"));
+         
     }
 
 }
