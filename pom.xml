@@ -13,7 +13,7 @@
 		<javax.servlet.version>2.5</javax.servlet.version>
 		<javax.servlet.jsp.version>2.2</javax.servlet.jsp.version>
 		<!-- 日志统一使用logback -->
-		<logback.version>1.1.2</logback.version>
+		<logback.version>1.2.0</logback.version>
 		<jcl-over-slf4j.version>1.7.7</jcl-over-slf4j.version>
 		<log4j-over-slf4j.version>1.5.7</log4j-over-slf4j.version>
 		<jul-to-slf4j.version>1.7.6</jul-to-slf4j.version>
