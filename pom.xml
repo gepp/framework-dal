@@ -9,7 +9,7 @@
 		<spring.version>3.2.9.RELEASE</spring.version>
 		<mysql-connector-java.version>5.1.32</mysql-connector-java.version>
 		<javax.persistence.version>2.1.0</javax.persistence.version>
-		<fastjson.version>1.2.4</fastjson.version>
+		<fastjson.version>1.2.83</fastjson.version>
 		<javax.servlet.version>2.5</javax.servlet.version>
 		<javax.servlet.jsp.version>2.2</javax.servlet.jsp.version>
 		<!-- 日志统一使用logback -->
