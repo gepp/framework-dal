@@ -6,7 +6,7 @@
 	<artifactId>framework-dal</artifactId>
 	<version>1.0.7</version>
 	<properties>
-		<spring.version>3.2.9.RELEASE</spring.version>
+		<spring.version>3.2.18.RELEASE</spring.version>
 		<mysql-connector-java.version>5.1.32</mysql-connector-java.version>
 		<javax.persistence.version>2.1.0</javax.persistence.version>
 		<fastjson.version>1.2.4</fastjson.version>
